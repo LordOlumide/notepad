@@ -9,10 +9,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Notepad Text
           const Padding(
-            padding: EdgeInsets.fromLTRB(15, 40, 0, 15),
+            padding: EdgeInsets.fromLTRB(15, 70, 15, 10),
             child: Text(
               'Notepad',
               style: TextStyle(
@@ -23,15 +24,18 @@ class HomeScreen extends StatelessWidget {
           ),
 
           // The ListView
-          ListView(
-            children: [
-              for (int i = 0; i < database.length; i++)
-                Note(
-                  title: database[i]['title'],
-                  body: database[i]['body'],
-                  timeLastEdited: database[i]['timeLastEdited'],
-                ),
-            ],
+          Expanded(
+            child: ListView(
+              children: [
+                for (int i = 0; i < database.length; i++)
+                  Note(
+                    title: database[i]['title'],
+                    body: database[i]['body'],
+                    bgColor: database[i]['bgColor'],
+                    timeLastEdited: database[i]['timeLastEdited'],
+                  ),
+              ],
+            ),
           ),
         ],
       ),
