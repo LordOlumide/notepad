@@ -6,7 +6,7 @@ class Note extends StatelessWidget {
   final String body;
   final DateTime timeLastEdited;
 
-  Note({
+  const Note({
     Key? key,
     required this.title,
     required this.body,

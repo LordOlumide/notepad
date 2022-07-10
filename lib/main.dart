@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/homepage/home_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const NotepadApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class NotepadApp extends StatelessWidget {
+  const NotepadApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: HomeScreen(),
     );
   }

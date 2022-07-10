@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/dummy_db.dart';
+import 'package:notepad/homepage/visual_components/note_template.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,7 +25,12 @@ class HomeScreen extends StatelessWidget {
           // The ListView
           ListView(
             children: [
-              for (int i )
+              for (int i = 0; i < database.length; i++)
+                Note(
+                  title: database[i]['title'],
+                  body: database[i]['body'],
+                  timeLastEdited: database[i]['timeLastEdited'],
+                ),
             ],
           ),
         ],
