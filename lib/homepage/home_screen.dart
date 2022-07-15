@@ -3,7 +3,7 @@ import 'package:notepad/dummy_db.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +26,23 @@ class HomeScreen extends StatelessWidget {
           // The ListView
           Expanded(
             child: NestedScrollView(
+              controller: scrollController,
+              floatHeaderSlivers: true,
               headerSliverBuilder: (context, _) => [
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.black38,
                   ),
+                  padding: const EdgeInsets.all(5),
                   child: Row(
                     children: const [
+                      // search icon
                       Icon(
                         Icons.search,
                         color: Colors.black45,
                       ),
+                      // "Search notes" text
                       Text(
                         'Search notes',
                         style: TextStyle(
