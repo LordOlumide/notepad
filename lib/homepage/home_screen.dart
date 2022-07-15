@@ -25,16 +25,41 @@ class HomeScreen extends StatelessWidget {
 
           // The ListView
           Expanded(
-            child: ListView(
-              children: [
-                for (int i = 0; i < database.length; i++)
-                  Note(
-                    title: database[i]['title'],
-                    body: database[i]['body'],
-                    bgColor: database[i]['bgColor'],
-                    timeLastEdited: database[i]['timeLastEdited'],
+            child: NestedScrollView(
+              headerSliverBuilder: (context, _) => [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.black38,
                   ),
+                  child: Row(
+                    children: const [
+                      Icon(
+                        Icons.search,
+                        color: Colors.black45,
+                      ),
+                      Text(
+                        'Search notes',
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
+              body: ListView(
+                children: [
+                  for (int i = 0; i < database.length; i++)
+                    Note(
+                      title: database[i]['title'],
+                      body: database[i]['body'],
+                      bgColor: database[i]['bgColor'],
+                      timeLastEdited: database[i]['timeLastEdited'],
+                    ),
+                ],
+              ),
             ),
           ),
         ],

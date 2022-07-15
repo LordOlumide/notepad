@@ -11,6 +11,6 @@ const kBodyTextStyle = TextStyle(
 
 const kDateTimeTextStyle = TextStyle(
   fontSize: 11,
-  color: Colors.black38,
+  color: Colors.black45,
 );
 

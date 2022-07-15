@@ -18,6 +18,9 @@ class Note extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
+    DateFormat hourDateFormat = DateFormat.jm(); // time
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       padding: const EdgeInsets.all(10),
@@ -53,7 +56,8 @@ class Note extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 15, bottom: 6),
             child: Text(
-              timeLastEdited.toString(),
+              '${dayDateFormat.format(timeLastEdited)} '
+                  '${hourDateFormat.format(timeLastEdited)}',
               style: kDateTimeTextStyle,
             ),
           )
