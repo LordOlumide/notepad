@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/dummy_db.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
+import 'package:notepad/general_components/note_object.dart';
+import 'package:notepad/general_components/main_database.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  final mainDatabase = NotepadDatabase();
+
+  initializeDB() async {
+    await mainDatabase.initializeDatabase();
+
+    // add the entries in the dummy db
+    for (int i = 0; i < dummyDatabase.length; i++) {
+      await mainDatabase.insertNote(dummyDatabase[i]);
+    }
+
+    // check that entering the entries worked
+    final List<Note> dummyEntries = await mainDatabase.getNotes();
+    for (Note i in dummyEntries) {
+      print(i.toString());
+    }
+
+    // set the currentNotes List
+    await refreshCurrentNotes();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDB();
+  }
+
+  /// This List is for display purposes only. Not to be edited.
+  List<Note> currentNotes = [];
+
+  // To refresh the currentNotes list.
+  Future<void> refreshCurrentNotes() async {
+    currentNotes = await mainDatabase.getNotes();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +109,14 @@ class HomeScreen extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate(
                     (context, i) {
                       return NoteCard(
-                        title: dummyDatabase[i].title,
-                        body: dummyDatabase[i].body,
-                        bgColor: dummyDatabase[i].bgColor,
+                        title: currentNotes[i].title,
+                        body: currentNotes[i].body,
+                        bgColorIntValue: currentNotes[i].bgColor,
                         timeLastEdited: DateTime.fromMillisecondsSinceEpoch(
-                            dummyDatabase[i].timeLastEdited),
+                            currentNotes[i].timeLastEdited),
                       );
                     },
-                    childCount: dummyDatabase.length,
+                    childCount: currentNotes.length,
                   ),
                 ),
               ],

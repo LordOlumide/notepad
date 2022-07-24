@@ -10,12 +10,14 @@ class NotepadDatabase {
   // creates the "notes" database if it doesn't exist already
   initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
+
     database = openDatabase(
       join(await getDatabasesPath(), 'notepad_database.db'),
       onCreate: (db, version) {
+        //TODO: change the id to AUTOINCREMENT.
         return db.execute('CREATE TABLE notes('
             'id INTEGER PRIMARY KEY, title TEXT, body TEXT, '
-            'timeLastEdited INTEGER, bgColor TEXT)');
+            'timeLastEdited INTEGER, bgColor INTEGER)');
       },
       version: 1,
     );
@@ -25,11 +27,16 @@ class NotepadDatabase {
   Future<void> insertNote(Note note) async {
     final db = await database;
 
-    await db.insert('notes', note.toMap());
+    await db.insert(
+      'notes',
+      note.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print("The Color format is:  ${note.bgColor}");
   }
 
   // Returns a list of all the notes in the "notes" database
-  Future<List<Note>> notes() async {
+  Future<List<Note>> getNotes() async {
     final db = await database;
 
     final List<Map<String, dynamic>> notesMap = await db.query('notes');
@@ -66,6 +73,12 @@ class NotepadDatabase {
       where: 'id: ?',
       whereArgs: [id],
     );
+  }
+
+  deletePreexistingNotesTable() async {
+    final db = await database;
+
+    db.execute('DROP TABLE IF EXISTS notes');
   }
 }
 

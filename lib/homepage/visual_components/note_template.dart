@@ -5,14 +5,14 @@ import 'package:intl/intl.dart';
 class NoteCard extends StatelessWidget {
   final String title;
   final String body;
-  final Color bgColor;
+  final int bgColorIntValue;
   final DateTime timeLastEdited;
 
   const NoteCard({
     Key? key,
     required this.title,
     required this.body,
-    required this.bgColor,
+    required this.bgColorIntValue,
     required this.timeLastEdited,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class NoteCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: Color(bgColorIntValue),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

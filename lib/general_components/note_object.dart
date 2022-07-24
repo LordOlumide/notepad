@@ -5,7 +5,7 @@ class Note {
   String title;
   String body;
   int timeLastEdited; // DateTime.millisecondsSinceEpoch
-  final Color bgColor;
+  final int bgColor;
 
   Note({
     required this.id,
@@ -32,7 +32,7 @@ class Note {
       'title': title,
       'body': body,
       'timeLastEdited': timeLastEdited,
-      'bgColor': bgColor.toString(),
+      'bgColor': bgColor,
     };
   }
 
@@ -41,6 +41,6 @@ class Note {
   String toString() {
     return 'Note{'
         'title: $title, body: $body, '
-        'timeLastEdited: $timeLastEdited, bgColor: ${bgColor.toString()}}';
+        'timeLastEdited: $timeLastEdited, bgColor: $bgColor';
   }
 }

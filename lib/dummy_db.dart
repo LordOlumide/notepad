@@ -11,7 +11,7 @@ List<Note> dummyDatabase = [
       aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
       sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.pink[50]!,
+    bgColor: Colors.pink[50]!.value,
   ),
   Note(
     id: 2,
@@ -22,7 +22,7 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.red[50]!,
+    bgColor: Colors.red[50]!.value,
   ),
   Note(
     id: 3,
@@ -33,7 +33,7 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.blue[50]!,
+    bgColor: Colors.blue[50]!.value,
   ),
   Note(
     id: 4,
@@ -44,14 +44,14 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.red[50]!,
+    bgColor: Colors.red[50]!.value,
   ),
   Note(
     id: 5,
     title: 'Really, the most correct way to wash out hiding lines from jeans',
     body: 'Lorem ipsum',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.green[50]!,
+    bgColor: Colors.green[50]!.value,
   ),
   Note(
     id: 6,
@@ -62,7 +62,7 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.black12,
+    bgColor: Colors.black12.value,
   ),
   Note(
     id: 7,
@@ -73,7 +73,7 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.red[50]!,
+    bgColor: Colors.red[50]!.value,
   ),
   Note(
     id: 8,
@@ -84,7 +84,7 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.blue[50]!,
+    bgColor: Colors.blue[50]!.value,
   ),
   Note(
     id: 9,
@@ -95,14 +95,14 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.red[50]!,
+    bgColor: Colors.red[50]!.value,
   ),
   Note(
     id: 10,
     title: 'Really, the most correct way to wash out hiding lines from jeans',
     body: '''Lorem ipsum''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.green[50]!,
+    bgColor: Colors.green[50]!.value,
   ),
   Note(
     id: 11,
@@ -113,6 +113,6 @@ List<Note> dummyDatabase = [
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
     timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
-    bgColor: Colors.black12,
+    bgColor: Colors.black12.value,
   ),
 ];

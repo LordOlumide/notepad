@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/homepage/home_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart'; // May not use provider
 
 void main() {
   runApp(NotepadApp());
