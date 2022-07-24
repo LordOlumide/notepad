@@ -29,39 +29,43 @@ class HomeScreen extends StatelessWidget {
               controller: scrollController,
               floatHeaderSlivers: true,
               headerSliverBuilder: (context, _) => [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.black38,
-                  ),
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    children: const [
-                      // search icon
-                      Icon(
-                        Icons.search,
-                        color: Colors.black45,
-                      ),
-                      // "Search notes" text
-                      Text(
-                        'Search notes',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 17,
+                // SearchBar container
+                GestureDetector(
+                  onTap: () {}, // Push to search screen
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.black38,
+                    ),
+                    padding: const EdgeInsets.all(5),
+                    child: Row(
+                      children: const [
+                        // search icon
+                        Icon(
+                          Icons.search,
+                          color: Colors.black45,
                         ),
-                      ),
-                    ],
+                        // "Search notes" text
+                        Text(
+                          'Search notes',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
               body: ListView(
                 children: [
-                  for (int i = 0; i < database.length; i++)
+                  for (int i = 0; i < dummyDatabase.length; i++)
                     Note(
-                      title: database[i]['title'],
-                      body: database[i]['body'],
-                      bgColor: database[i]['bgColor'],
-                      timeLastEdited: database[i]['timeLastEdited'],
+                      title: dummyDatabase[i].title,
+                      body: dummyDatabase[i].body,
+                      bgColor: dummyDatabase[i].bgColor,
+                      timeLastEdited: dummyDatabase[i].timeLastEdited,
                     ),
                 ],
               ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 Color returnRandomColor() {
   List<Color> kNoteColorList = [
