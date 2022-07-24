@@ -3,7 +3,6 @@ import 'package:notepad/dummy_db.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
 
 class HomeScreen extends StatelessWidget {
-  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +22,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // The ListView
+          // The ScrollView
           Expanded(
             child: CustomScrollView(
-              controller: scrollController,
               slivers: <Widget>[
-                // SearchBar container
+                // Floating appbar
                 SliverAppBar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.transparent,
                   floating: true,
-                  snap: true,
+                  elevation: 0,
+                  // SearchBar container
                   title: GestureDetector(
                     onTap: () {}, // Push to search screen
                     child: Container(
