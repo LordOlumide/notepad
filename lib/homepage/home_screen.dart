@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           // Notepad Text
           const Padding(
-            padding: EdgeInsets.fromLTRB(15, 120, 15, 10),
+            padding: EdgeInsets.fromLTRB(15, 120, 15, 15),
             child: Text(
               'Notepad',
               style: TextStyle(
@@ -25,20 +25,21 @@ class HomeScreen extends StatelessWidget {
 
           // The ListView
           Expanded(
-            child: NestedScrollView(
+            child: CustomScrollView(
               controller: scrollController,
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, _) => [
+              slivers: <Widget>[
                 // SearchBar container
                 SliverAppBar(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Colors.blue,
+                  floating: true,
+                  snap: true,
                   title: GestureDetector(
                     onTap: () {}, // Push to search screen
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey[200],
+                        color: Colors.grey[200]!,
                       ),
                       padding: const EdgeInsets.all(5),
                       child: Row(
@@ -60,20 +61,24 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
+
+                // body
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) {
+                      return NoteCard(
+                        title: dummyDatabase[i].title,
+                        body: dummyDatabase[i].body,
+                        bgColor: dummyDatabase[i].bgColor,
+                        timeLastEdited: DateTime.fromMillisecondsSinceEpoch(
+                            dummyDatabase[i].timeLastEdited),
+                      );
+                    },
+                    childCount: dummyDatabase.length,
+                  ),
+                ),
               ],
-              body: ListView(
-                children: [
-                  for (int i = 0; i < dummyDatabase.length; i++)
-                    NoteCard(
-                      title: dummyDatabase[i].title,
-                      body: dummyDatabase[i].body,
-                      bgColor: dummyDatabase[i].bgColor,
-                      timeLastEdited: DateTime.fromMillisecondsSinceEpoch(
-                          dummyDatabase[i].timeLastEdited),
-                    ),
-                ],
-              ),
             ),
           ),
         ],
