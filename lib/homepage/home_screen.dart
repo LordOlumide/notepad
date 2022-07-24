@@ -104,13 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) {
-                      return NoteCard(
-                        title: currentNotes[i].title,
-                        body: currentNotes[i].body,
-                        bgColorIntValue: currentNotes[i].bgColor,
-                        timeLastEdited: DateTime.fromMillisecondsSinceEpoch(
-                            currentNotes[i].timeLastEdited),
-                      );
+                      return NoteCard(note: currentNotes[i]);
                     },
                     childCount: currentNotes.length,
                   ),

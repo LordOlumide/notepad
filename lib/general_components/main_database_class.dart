@@ -38,7 +38,6 @@ class NotepadDatabase {
       note.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print("The Color format is:  ${note.bgColor}");
   }
 
   // Returns a list of all the notes in the "notes" database
