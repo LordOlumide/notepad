@@ -4,7 +4,7 @@ class Note {
   String title;
   String body;
   DateTime timeLastEdited;
-  Color bgColor;
+  final Color bgColor;
 
   Note({
     this.title = '',
@@ -12,4 +12,14 @@ class Note {
     required this.timeLastEdited,
     required this.bgColor,
   });
+
+  updateNote({
+    String? newTitle,
+    String? newBody,
+    required DateTime newTimeLastEdited,
+  }) {
+    timeLastEdited = newTimeLastEdited;
+    title = newTitle ?? title;
+    body = newBody ?? body;
+  }
 }

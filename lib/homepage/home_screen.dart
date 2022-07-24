@@ -30,30 +30,33 @@ class HomeScreen extends StatelessWidget {
               floatHeaderSlivers: true,
               headerSliverBuilder: (context, _) => [
                 // SearchBar container
-                GestureDetector(
-                  onTap: () {}, // Push to search screen
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.black38,
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    child: Row(
-                      children: const [
-                        // search icon
-                        Icon(
-                          Icons.search,
-                          color: Colors.black45,
-                        ),
-                        // "Search notes" text
-                        Text(
-                          'Search notes',
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 17,
+                SliverAppBar(
+                  backgroundColor: Colors.transparent,
+                  title: GestureDetector(
+                    onTap: () {}, // Push to search screen
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.black38,
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        children: const [
+                          // search icon
+                          Icon(
+                            Icons.search,
+                            color: Colors.black45,
                           ),
-                        ),
-                      ],
+                          // "Search notes" text
+                          Text(
+                            'Search notes',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
