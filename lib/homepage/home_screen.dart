@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey[200]!,
+                        color: Colors.grey[100]!,
                       ),
                       padding: const EdgeInsets.all(5),
                       child: Row(
@@ -84,14 +84,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           // search icon
                           Icon(
                             Icons.search,
-                            color: Colors.black45,
+                            color: Colors.black26,
                           ),
+                          SizedBox(width: 10),
                           // "Search notes" text
                           Text(
                             'Search notes',
                             style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 17,
+                              color: Colors.black45,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
