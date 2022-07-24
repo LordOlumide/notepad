@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notepad/dummy_db.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
 import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/general_components/main_database.dart';
+import 'package:notepad/general_components/main_database_class.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -22,12 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await mainDatabase.insertNote(dummyDatabase[i]);
     }
 
-    // check that entering the entries worked
-    final List<Note> dummyEntries = await mainDatabase.getNotes();
-    for (Note i in dummyEntries) {
-      print(i.toString());
-    }
-
     // set the currentNotes List
     await refreshCurrentNotes();
   }
@@ -44,11 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // To refresh the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     currentNotes = await mainDatabase.getNotes();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -70,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: <Widget>[
                 // Floating appbar
                 SliverAppBar(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Colors.white,
                   floating: true,
                   elevation: 0,
                   // SearchBar container

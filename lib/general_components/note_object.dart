@@ -40,7 +40,10 @@ class Note {
   @override
   String toString() {
     return 'Note{'
-        'title: $title, body: $body, '
-        'timeLastEdited: $timeLastEdited, bgColor: $bgColor';
+        'title: ${title.substring(0, title.length > 25 ? 25 : null)}, '
+        'body: ${body.substring(0, body.length > 25 ? 25 : null)}, '
+        'timeLastEdited: $timeLastEdited, '
+        'bgColor: $bgColor'
+        '}';
   }
 }

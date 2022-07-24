@@ -11,6 +11,12 @@ class NotepadDatabase {
   initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    // TODO: The database will have to be stabilized after getting rid of the dummyDB. No more delete-recreate.
+    // delete the previous database
+    deletePreexistingDatabase(
+        join(await getDatabasesPath(), 'notepad_database.db'));
+
+    // create the database afresh.
     database = openDatabase(
       join(await getDatabasesPath(), 'notepad_database.db'),
       onCreate: (db, version) {
@@ -75,10 +81,12 @@ class NotepadDatabase {
     );
   }
 
-  deletePreexistingNotesTable() async {
-    final db = await database;
+  Future<void> deletePreexistingDatabase(String path) async {
+    // final db = await database;
+    // // Deletes the notes database if it exists.
+    // db.execute('DROP TABLE IF EXISTS notes');
 
-    db.execute('DROP TABLE IF EXISTS notes');
+    databaseFactory.deleteDatabase(path);
   }
 }
 

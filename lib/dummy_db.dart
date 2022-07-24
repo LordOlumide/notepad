@@ -5,7 +5,7 @@ List<Note> dummyDatabase = [
   Note(
     id: 1,
     title: 'To do list',
-    body: '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    body: '''First Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
       Nam eget urna lacus. Quisque malesuada sollicitudin justo, 
       quis mattis felis elementum quis. Nullam gravida ipsum eget 
       aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
