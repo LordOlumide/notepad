@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:notepad/homepage/constants.dart';
 import 'package:intl/intl.dart';
 
-class Note extends StatelessWidget {
+class NoteCard extends StatelessWidget {
   final String title;
   final String body;
   final Color bgColor;
   final DateTime timeLastEdited;
 
-  const Note({
+  const NoteCard({
     Key? key,
     required this.title,
     required this.body,

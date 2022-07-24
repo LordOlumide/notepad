@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           // Notepad Text
           const Padding(
-            padding: EdgeInsets.fromLTRB(15, 70, 15, 10),
+            padding: EdgeInsets.fromLTRB(15, 120, 15, 10),
             child: Text(
               'Notepad',
               style: TextStyle(
@@ -35,9 +35,10 @@ class HomeScreen extends StatelessWidget {
                   title: GestureDetector(
                     onTap: () {}, // Push to search screen
                     child: Container(
+                      height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.black38,
+                        color: Colors.grey[200],
                       ),
                       padding: const EdgeInsets.all(5),
                       child: Row(
@@ -64,11 +65,12 @@ class HomeScreen extends StatelessWidget {
               body: ListView(
                 children: [
                   for (int i = 0; i < dummyDatabase.length; i++)
-                    Note(
+                    NoteCard(
                       title: dummyDatabase[i].title,
                       body: dummyDatabase[i].body,
                       bgColor: dummyDatabase[i].bgColor,
-                      timeLastEdited: dummyDatabase[i].timeLastEdited,
+                      timeLastEdited: DateTime.fromMillisecondsSinceEpoch(
+                          dummyDatabase[i].timeLastEdited),
                     ),
                 ],
               ),
