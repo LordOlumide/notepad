@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 
 class Note {
   final int id;
   String title;
   String body;
-  int timeLastEdited; // DateTime.millisecondsSinceEpoch
+  int timeLastEdited; // int DateTime.millisecondsSinceEpoch
   final int bgColor;
 
   Note({
