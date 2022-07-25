@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/dummy_db.dart';
+import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
 import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/general_components/main_database_class.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -12,37 +12,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  final mainDatabase = NotepadDatabase();
-
-  initializeDB() async {
-    await mainDatabase.initializeDatabase();
-
-    // add the entries in the dummy db
-    for (int i = 0; i < dummyDatabase.length; i++) {
-      await mainDatabase.insertNote(dummyDatabase[i]);
-    }
-
-    // set the currentNotes List
-    await refreshCurrentNotes();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initializeDB();
-  }
-
   /// This List is for display purposes only. Not to be edited.
   List<Note> currentNotes = [];
 
   // To refresh the currentNotes list.
   Future<void> refreshCurrentNotes() async {
-    currentNotes = await mainDatabase.getNotes();
+    print('before refreshing');
+    currentNotes = await Provider.of<NotepadDatabase>(context).getNotes();
+    print('after refreshing');
     setState(() {});
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    print("Reached home screen");
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    refreshCurrentNotes();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(

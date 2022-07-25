@@ -5,7 +5,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class NotepadDatabase {
-  late final Future<Database> database;
+  // It is private so it can only be accessed by the defined CRUD functions
+  late final Future<Database> _database;
 
   // creates the "notes" database if it doesn't exist already
   initializeDatabase() async {
@@ -17,7 +18,7 @@ class NotepadDatabase {
         join(await getDatabasesPath(), 'notepad_database.db'));
 
     // create the database afresh.
-    database = openDatabase(
+    _database = openDatabase(
       join(await getDatabasesPath(), 'notepad_database.db'),
       onCreate: (db, version) {
         //TODO: change the id to AUTOINCREMENT.
@@ -31,7 +32,7 @@ class NotepadDatabase {
 
   // Inserts a new note into the "notes" database
   Future<void> insertNote(Note note) async {
-    final db = await database;
+    final db = await _database;
 
     await db.insert(
       'notes',
@@ -42,7 +43,7 @@ class NotepadDatabase {
 
   // Returns a list of all the notes in the "notes" database
   Future<List<Note>> getNotes() async {
-    final db = await database;
+    final db = await _database;
 
     final List<Map<String, dynamic>> notesMap = await db.query('notes');
     return List.generate(
@@ -58,7 +59,7 @@ class NotepadDatabase {
 
   // Updates a note in the "notes" database
   Future<void> updateNote(Note note) async {
-    final db = await database;
+    final db = await _database;
 
     await db.update(
       "notes",
@@ -71,7 +72,7 @@ class NotepadDatabase {
   //TODO: if title == "" & body == "", delete that note
   // Deletes a note from the "notes" database
   Future<void> deleteNote(int id) async {
-    final db = await database;
+    final db = await _database;
 
     await db.delete(
       'notes',
@@ -80,6 +81,7 @@ class NotepadDatabase {
     );
   }
 
+  /// For development purposes
   Future<void> deletePreexistingDatabase(String path) async {
     // final db = await database;
     // // Deletes the notes database if it exists.
