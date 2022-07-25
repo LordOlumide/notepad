@@ -5,44 +5,49 @@ import 'package:notepad/general_components/note_object.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   /// This List is for display purposes only. Not to be edited.
   List<Note> currentNotes = [];
 
   // To refresh the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     print('before refreshing');
-    currentNotes = await Provider.of<NotepadDatabase>(context).getNotes();
+    final tempCurrentNotes =
+        await Provider.of<NotepadDatabase>(context, listen: false).getNotes();
+    setState(() {
+      currentNotes = tempCurrentNotes;
+    });
     print('after refreshing');
-    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
 
-    print("Reached home screen");
+    refreshCurrentNotes();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    refreshCurrentNotes();
-
     return Scaffold(
       backgroundColor: Colors.white,
+      // Empty appbar to configure the status bar
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Notepad Text
           const Padding(
-            padding: EdgeInsets.fromLTRB(15, 120, 15, 15),
+            padding: EdgeInsets.fromLTRB(15, 70, 15, 15),
             child: Text(
               'Notepad',
               style: TextStyle(

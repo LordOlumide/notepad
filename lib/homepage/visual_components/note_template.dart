@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/homepage/constants.dart';
-import 'package:notepad/general_components/note_object.dart';
 import 'package:intl/intl.dart';
+import 'package:notepad/homepage/homescreen_constants.dart';
+import 'package:notepad/general_components/note_object.dart';
+import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -10,16 +11,18 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Prepare the date and time formats with intl
     DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
     DateFormat hourDateFormat = DateFormat.jm(); // time
 
     // Actual time last edited in DateTime format
-    DateTime timeLastEdited =
+    DateTime timeLastEditedDateTime =
         DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
 
     return GestureDetector(
       onTap: () {
-        print('${note.title} note tapped!');
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => NoteEditingScreen(note: note)));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -56,8 +59,8 @@ class NoteCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: Text(
-                '${dayDateFormat.format(timeLastEdited)} '
-                '${hourDateFormat.format(timeLastEdited)}',
+                '${dayDateFormat.format(timeLastEditedDateTime)} '
+                '${hourDateFormat.format(timeLastEditedDateTime)}',
                 style: kDateTimeTextStyle,
               ),
             )

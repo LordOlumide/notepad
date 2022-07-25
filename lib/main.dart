@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'loading_screen.dart';
+import 'package:flutter/services.dart';
 
 // Note: The main Database is initialized in the Loading Screen.
 // The Provider is wrapped around the HomeScreen from the LoadingScreen.
 
 void main() {
+  // Set the status bar color to transparent
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+
   runApp(NotepadApp());
 }
 

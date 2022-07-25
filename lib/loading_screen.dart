@@ -17,6 +17,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   // Open the main Database
   final mainDatabase = NotepadDatabase();
 
+  // TODO: Remove the dummy DB
   _initializeDBAndPushToHomeScreen() async {
     // Initialize the Database
     await mainDatabase.initializeDatabase();
