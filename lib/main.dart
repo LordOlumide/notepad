@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/homepage/home_screen.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/dummy_db.dart';
 import 'general_components/note_object.dart';
+
+// screens
+import 'loading_screen.dart';
+import 'package:notepad/homepage/home_screen.dart';
 
 void main() {
   runApp(NotepadApp());
@@ -15,7 +18,6 @@ class NotepadApp extends StatefulWidget {
 }
 
 class _NotepadAppState extends State<NotepadApp> {
-
   // Open the main Database
   final mainDatabase = NotepadDatabase();
 
@@ -42,17 +44,25 @@ class _NotepadAppState extends State<NotepadApp> {
     super.initState();
     print('Created main DB');
 
-    // Initialize the main database
+    // Initialize the main database asynchronously
     initializeDB();
+
+    // Push to home screen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Provider(
+          create: (context) => mainDatabase,
+          child: MaterialApp(
+            home: HomeScreen(),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => mainDatabase,
-      child: MaterialApp(
-        home: HomeScreen(),
-      ),
-    );
+    return const LoadingScreen();
   }
 }
