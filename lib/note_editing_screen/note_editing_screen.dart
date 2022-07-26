@@ -27,26 +27,46 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
         DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: NormalAppBar(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Time last edited
-          Text(
-              '${dayDateFormat.format(timeLastEditedDateTime)} '
-                  '${hourDateFormat.format(timeLastEditedDateTime)}',
-            style: const TextStyle(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 18, 15, 10),
+            child: Text(
+                '${dayDateFormat.format(timeLastEditedDateTime)} '
+                    '${hourDateFormat.format(timeLastEditedDateTime)}',
+              style: const TextStyle(
+                fontSize: 16.5,
+              ),
+            ),
           ),
 
           // Title
-          Text(
-            widget.note.title,
-            style: const TextStyle(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            child: Text(
+              widget.note.title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
 
           // Body
-          Text(
-            widget.note.body,
-            style: const TextStyle(),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Text(
+                widget.note.body,
+                style: const TextStyle(
+                  fontSize: 15.1,
+                ),
+              ),
+            ),
           ),
         ],
       ),

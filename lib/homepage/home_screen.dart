@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                // body
+                // Main list body
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) {
