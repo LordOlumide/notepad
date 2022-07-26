@@ -3,7 +3,6 @@ import 'package:notepad/homepage/home_screen.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/dummy_db.dart';
-import 'general_components/note_object.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);

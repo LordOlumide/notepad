@@ -68,7 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 0,
                   // SearchBar container
                   title: GestureDetector(
-                    onTap: () {}, // Push to search screen
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text('Processing'),
+                              ));
+                    }, // Push to search screen
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
