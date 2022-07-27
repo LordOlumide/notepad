@@ -17,19 +17,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
   final mainDatabase = NotepadDatabase();
 
   // TODO: Remove the dummy DB
-  _initializeDBAndPushToHomeScreen() async {
+  _initializeDBAndPushReplacementToHomeScreen() async {
     // Initialize the Database
     await mainDatabase.initializeDatabase();
 
     // Adding the entries in the dummy db for testing purposes
     for (int i = 0; i < dummyDatabase.length; i++) {
-      await mainDatabase.insertNote(dummyDatabase[i]);
+      await mainDatabase.dbInsertNote(dummyDatabase[i]);
     }
     // Push to home screen
-    _pushToHomeScreen();
+    _pushReplacementToHomeScreen();
   }
 
-  _pushToHomeScreen() {
+  _pushReplacementToHomeScreen() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -45,7 +45,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     // Initialize the main database asynchronously
-    _initializeDBAndPushToHomeScreen();
+    _initializeDBAndPushReplacementToHomeScreen();
   }
 
   @override

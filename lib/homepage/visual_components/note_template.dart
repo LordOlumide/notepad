@@ -4,11 +4,19 @@ import 'package:notepad/homepage/homescreen_constants.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 
-class NoteCard extends StatelessWidget {
+class NoteCard extends StatefulWidget {
   final Note note;
+  final Function refreshHomePageList;
 
-  const NoteCard({Key? key, required this.note}) : super(key: key);
+  const NoteCard(
+      {Key? key, required this.note, required this.refreshHomePageList})
+      : super(key: key);
 
+  @override
+  State<NoteCard> createState() => _NoteCardState();
+}
+
+class _NoteCardState extends State<NoteCard> {
   @override
   Widget build(BuildContext context) {
     // Prepare the date and time formats with intl
@@ -17,18 +25,21 @@ class NoteCard extends StatelessWidget {
 
     // Actual time last edited in DateTime format
     DateTime timeLastEditedDateTime =
-        DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
+        DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
 
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => NoteEditingScreen(note: note)));
+      onTap: () async {
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => NoteEditingScreen(note: widget.note)));
+        setState(() {
+          widget.refreshHomePageList();
+        });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Color(note.bgColor),
+          color: Color(widget.note.bgColor),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -38,7 +49,7 @@ class NoteCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Text(
-                note.title != '' ? note.title : note.body,
+                widget.note.title != '' ? widget.note.title : widget.note.body,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: kTitleTextStyle,
@@ -46,9 +57,9 @@ class NoteCard extends StatelessWidget {
             ),
 
             // Body
-            note.title != ''
+            widget.note.title != ''
                 ? Text(
-                    note.body,
+                    widget.note.body,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: kBodyTextStyle,

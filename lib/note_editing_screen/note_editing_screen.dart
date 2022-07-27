@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // Components
 import 'package:notepad/note_editing_screen/visual_components/'
@@ -28,8 +30,18 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
   late TextEditingController titleController;
   late TextEditingController bodyController;
 
+  testProvider() async {
+    // test if the mainDatabase reaches here in the widget tree
+    List<Note> testList = await Provider.of<NotepadDatabase>(context).dbGetNotes();
+    for (Note i in testList) {
+      print(i.toString());
+    }
+  }
+
   @override
   void initState() {
+    testProvider();
+
     super.initState();
     // Initialize the focusNodes
     titleFocusNode = FocusNode();
@@ -58,7 +70,10 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: NormalAppBar(),
+      appBar: NormalAppBar(
+        titleFocusNode: titleFocusNode,
+        bodyFocusNode: bodyFocusNode,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,7 +91,17 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
           // Title textField
           TextField(
-            onChanged: (newValue) {},
+            onChanged: (newValue) async {
+              // Created an updated note object
+              Note noteTempForUpdate = widget.note;
+              noteTempForUpdate.updateNote(
+                newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                newTitle: newValue,
+              );
+              // Update the database with the updated note object
+              await Provider.of<NotepadDatabase>(context, listen: false)
+                  .dbUpdateNote(noteTempForUpdate);
+            },
             focusNode: titleFocusNode,
             controller: titleController,
             decoration: const InputDecoration(
@@ -105,7 +130,17 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
           // Body textField
           TextField(
-            onChanged: (newValue) {},
+            onChanged: (newValue) async {
+              // Created an updated note object
+              Note noteTempForUpdate = widget.note;
+              noteTempForUpdate.updateNote(
+                newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                newBody: newValue,
+              );
+              // Update the database with the updated note object
+              await Provider.of<NotepadDatabase>(context, listen: false)
+                  .dbUpdateNote(noteTempForUpdate);
+            },
             focusNode: bodyFocusNode,
             controller: bodyController,
             decoration: const InputDecoration(
@@ -117,7 +152,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                 height: 1.5,
               ),
               contentPadding:
-              EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               border: InputBorder.none,
             ),
             cursorColor: Colors.green,

@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final FocusNode titleFocusNode;
+  final FocusNode bodyFocusNode;
+
+  const NormalAppBar({
+    required this.titleFocusNode,
+    required this.bodyFocusNode
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
@@ -33,7 +40,10 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
             Icons.more_vert,
             color: Colors.green,
           ),
-          onPressed: () {},
+          onPressed: () {
+            bodyFocusNode.unfocus();
+            titleFocusNode.unfocus();
+          },
         ),
       ],
       elevation: 0,

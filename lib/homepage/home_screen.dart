@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> refreshCurrentNotes() async {
     print('before refreshing');
     final tempCurrentNotes =
-        await Provider.of<NotepadDatabase>(context, listen: false).getNotes();
+        await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
     setState(() {
       currentNotes = tempCurrentNotes;
     });
@@ -68,13 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 0,
                   // SearchBar container
                   title: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: Text('Processing'),
-                              ));
-                    }, // Push to search screen
+                    onTap: () {}, // Push to search screen
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
@@ -109,7 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) {
-                      return NoteCard(note: currentNotes[i]);
+                      return NoteCard(
+                        note: currentNotes[i],
+                        refreshHomePageList: refreshCurrentNotes,
+                      );
                     },
                     childCount: currentNotes.length,
                   ),

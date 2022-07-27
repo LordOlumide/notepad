@@ -31,7 +31,7 @@ class NotepadDatabase {
   }
 
   // Inserts a new note into the "notes" database
-  Future<void> insertNote(Note note) async {
+  Future<void> dbInsertNote(Note note) async {
     final db = await _database;
 
     await db.insert(
@@ -42,7 +42,7 @@ class NotepadDatabase {
   }
 
   // Returns a list of all the notes in the "notes" database
-  Future<List<Note>> getNotes() async {
+  Future<List<Note>> dbGetNotes() async {
     final db = await _database;
 
     final List<Map<String, dynamic>> notesMap = await db.query('notes');
@@ -58,7 +58,7 @@ class NotepadDatabase {
   }
 
   // Updates a note in the "notes" database
-  Future<void> updateNote(Note note) async {
+  Future<void> dbUpdateNote(Note note) async {
     final db = await _database;
 
     await db.update(
@@ -71,7 +71,7 @@ class NotepadDatabase {
 
   //TODO: if title == "" & body == "", delete that note
   // Deletes a note from the "notes" database
-  Future<void> deleteNote(int id) async {
+  Future<void> dbDeleteNote(int id) async {
     final db = await _database;
 
     await db.delete(
