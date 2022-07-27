@@ -3,6 +3,7 @@ import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:notepad/general_components/main_database_class.dart';
 
 // Components
 import 'package:notepad/note_editing_screen/visual_components/'
@@ -10,8 +11,11 @@ import 'package:notepad/note_editing_screen/visual_components/'
 
 class NoteEditingScreen extends StatefulWidget {
   final Note note;
+  final NotepadDatabase mainDatabase;
 
-  const NoteEditingScreen({Key? key, required this.note}) : super(key: key);
+  const NoteEditingScreen(
+      {Key? key, required this.note, required this.mainDatabase})
+      : super(key: key);
 
   @override
   State<NoteEditingScreen> createState() => _NoteEditingScreenState();
@@ -32,7 +36,8 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
   testProvider() async {
     // test if the mainDatabase reaches here in the widget tree
-    List<Note> testList = await Provider.of<NotepadDatabase>(context).dbGetNotes();
+    List<Note> testList =
+        await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
     for (Note i in testList) {
       print(i.toString());
     }
@@ -40,9 +45,9 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
   @override
   void initState() {
-    testProvider();
-
     super.initState();
+    // testProvider();
+
     // Initialize the focusNodes
     titleFocusNode = FocusNode();
     bodyFocusNode = FocusNode();
@@ -99,8 +104,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                 newTitle: newValue,
               );
               // Update the database with the updated note object
-              await Provider.of<NotepadDatabase>(context, listen: false)
-                  .dbUpdateNote(noteTempForUpdate);
+              await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
             },
             focusNode: titleFocusNode,
             controller: titleController,
@@ -129,41 +133,42 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
           ),
 
           // Body textField
-          TextField(
-            onChanged: (newValue) async {
-              // Created an updated note object
-              Note noteTempForUpdate = widget.note;
-              noteTempForUpdate.updateNote(
-                newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
-                newBody: newValue,
-              );
-              // Update the database with the updated note object
-              await Provider.of<NotepadDatabase>(context, listen: false)
-                  .dbUpdateNote(noteTempForUpdate);
-            },
-            focusNode: bodyFocusNode,
-            controller: bodyController,
-            decoration: const InputDecoration(
-              hintText: 'Note something down',
-              hintStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.black38,
+          Expanded(
+            child: TextField(
+              onChanged: (newValue) async {
+                // Created an updated note object
+                Note noteTempForUpdate = widget.note;
+                noteTempForUpdate.updateNote(
+                  newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                  newBody: newValue,
+                );
+                // Update the database with the updated note object
+                await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
+              },
+              focusNode: bodyFocusNode,
+              controller: bodyController,
+              decoration: const InputDecoration(
+                hintText: 'Note something down',
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black38,
+                  height: 1.5,
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                border: InputBorder.none,
+              ),
+              cursorColor: Colors.green,
+              cursorHeight: 30,
+              cursorWidth: 1.5,
+              style: const TextStyle(
+                fontSize: 15.1,
                 height: 1.5,
               ),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              border: InputBorder.none,
+              textCapitalization: TextCapitalization.sentences,
+              maxLines: null,
             ),
-            cursorColor: Colors.green,
-            cursorHeight: 30,
-            cursorWidth: 1.5,
-            style: const TextStyle(
-              fontSize: 15.1,
-              height: 1.5,
-            ),
-            textCapitalization: TextCapitalization.sentences,
-            maxLines: null,
           ),
         ],
       ),

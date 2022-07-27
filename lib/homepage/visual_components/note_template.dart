@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:notepad/homepage/homescreen_constants.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:notepad/general_components/main_database_class.dart';
 
 class NoteCard extends StatefulWidget {
   final Note note;
@@ -28,12 +30,18 @@ class _NoteCardState extends State<NoteCard> {
         DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
 
     return GestureDetector(
-      onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => NoteEditingScreen(note: widget.note)));
-        setState(() {
-          widget.refreshHomePageList();
-        });
+      onTap: () {
+        NotepadDatabase mainDatabase =
+            Provider.of<NotepadDatabase>(context, listen: false);
+        Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => NoteEditingScreen(
+                    note: widget.note, mainDatabase: mainDatabase)))
+            .then((value) => {
+                  setState(() {
+                    widget.refreshHomePageList();
+                  })
+                });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

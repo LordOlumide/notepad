@@ -15,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // To refresh the currentNotes list.
   Future<void> refreshCurrentNotes() async {
+    // TODO: use notifyListeners to update the currentNotes from the mainDB object
     print('before refreshing');
     final tempCurrentNotes =
         await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
