@@ -102,29 +102,33 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
             textCapitalization: TextCapitalization.sentences,
             maxLines: null,
           ),
-          // Title
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            child: Text(
-              widget.note.title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
 
-          // Body
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Text(
-                widget.note.body,
-                style: const TextStyle(
-                  fontSize: 15.1,
-                ),
+          // Body textField
+          TextField(
+            onChanged: (newValue) {},
+            focusNode: bodyFocusNode,
+            controller: bodyController,
+            decoration: const InputDecoration(
+              hintText: 'Note something down',
+              hintStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black38,
+                height: 1.5,
               ),
+              contentPadding:
+              EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              border: InputBorder.none,
             ),
+            cursorColor: Colors.green,
+            cursorHeight: 30,
+            cursorWidth: 1.5,
+            style: const TextStyle(
+              fontSize: 15.1,
+              height: 1.5,
+            ),
+            textCapitalization: TextCapitalization.sentences,
+            maxLines: null,
           ),
         ],
       ),
