@@ -13,12 +13,50 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool selectionMode = false;
+  bool allNotesAreSelected = false;
 
-  /// Activates select mode
+  List<Note> selectedNotes = [];
+
   void activateSelectionMode() {
     setState(() {
       selectionMode = true;
     });
+  }
+
+  void deactivateSelectionMode() {
+    selectedNotes.clear();
+    setState(() {
+      selectionMode = false;
+    });
+  }
+
+  void addToSelectedNotes(Note note) {
+    setState(() {
+      selectedNotes.add(note);
+    });
+  }
+
+  void removeFromSelectedNotes(Note note) {
+    setState(() {
+      selectedNotes.remove(note);
+    });
+  }
+
+  void toggleAllNotesSelection() {
+    // TODO: Implement
+    setState(() {
+      allNotesAreSelected = !allNotesAreSelected;
+    });
+    if (allNotesAreSelected == true) {
+      for (Note i in currentNotes) {
+        addToSelectedNotes(i);
+      }
+    } else {
+      // TODO: You'll have to update the noteCards with the selectedNotes List
+      for (Note i in selectedNotes) {
+        selectedNotes.remove(i);
+      }
+    }
   }
 
   /// This List is for display purposes only.
@@ -30,30 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object
     List<Note> tempCurrentNotes =
         await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
-
-    // TODO: Find another way to delete notes without checking every note.
-    // Deleting empty notes
-    List<Note> notesToBeRemoved = [];
-    // select the empty notes
-    for (Note i in tempCurrentNotes) {
-      if (i.title == '' && i.body == '') {
-        notesToBeRemoved.add(i);
-      }
-    }
-    // remove the deleted note from tempNotes
-    for (Note i in notesToBeRemoved) {
-      // remove from database
-      if (mounted) {
-        await Provider.of<NotepadDatabase>(context, listen: false).dbDeleteNote(i.id);
-      } else {
-        // TODO: delete all print statements in the app. Maybe delete this recursion.
-        print('Problem with buildContext across async gap. Re-trying...');
-        refreshCurrentNotes();
-      }
-      // remove from display list
-      tempCurrentNotes.remove(i);
-    }
-
     // Sort tempNotes and refresh the screen
     tempCurrentNotes
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
@@ -62,11 +76,18 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> deleteNoteFromDB(Note note) async {
+    if (mounted) {
+      await Provider.of<NotepadDatabase>(context, listen: false)
+          .dbDeleteNote(note.id);
+    }
+  }
+
   /// gets all current IDs, sorts them in a list,
   /// returns 'the last item in the list' + 1.
   int getNewId() {
-    // TODO: Make this algorithm more efficient. It doesn't account for deleted Notes.
-    // Use a UUID package.
+    // TODO: Make this algorithm better and more efficient. It doesn't account for deleted Notes.
+    // Maybe find a UUID package.
     List<int> listOfActiveIds = [];
     for (Note i in currentNotes) {
       listOfActiveIds.add(i.id);
@@ -84,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     /// Pushes to the EditingScreen
     Future<void> pushToEditingScreen(Note newNote) {
       final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
@@ -95,118 +115,216 @@ class _HomeScreenState extends State<HomeScreen> {
               )));
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      // Empty appbar to configure the status bar
-      appBar: AppBar(
-        toolbarHeight: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        // trying to pop the screen in selectionMode will deactivate selection mode,
+        // in normal mode, will pop normally.
+        if (selectionMode == true) {
+          deactivateSelectionMode();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Notepad Text
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 70, 15, 15),
-            child: Text(
-              'Notepad',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
+        appBar: selectionMode == false
+            // Empty appbar to configure the status bar
+            ? AppBar(
+                toolbarHeight: 0,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+              )
+            // Real appbar that activates in select mode
+            : AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.green,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    deactivateSelectionMode();
+                  },
+                ),
+                titleTextStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+                titleSpacing: 4,
+                // Display the number of selected items if any items are selected
+                title: selectedNotes.isEmpty
+                    ? const Text('Please select items')
+                    : selectedNotes.length == 1
+                        ? const Text('1 item selected')
+                        : Text('${selectedNotes.length} items selected'),
+                backgroundColor: Colors.white,
+                elevation: 0,
+                toolbarHeight: 50,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Checkbox(
+                      value: allNotesAreSelected,
+                      onChanged: (newValue) {
+                        toggleAllNotesSelection();
+                      },
+                      activeColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3)),
+                    ),
+                  ),
+                ],
+              ),
+        body: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Notepad Text
+            Padding(
+              padding: selectionMode == false
+                  ? const EdgeInsets.fromLTRB(15, 60, 15, 15)
+                  : const EdgeInsets.fromLTRB(15, 10, 15, 15),
+              child: const Text(
+                'Notepad',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
 
-          // The ScrollView
-          Expanded(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                // Floating appbar
-                SliverAppBar(
-                  backgroundColor: Colors.white,
-                  floating: true,
-                  elevation: 0,
-                  // TODO: implement search bar
-                  // SearchBar container
-                  title: GestureDetector(
-                    onTap: () {}, // Push to search screen
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey[100]!,
+            // The ScrollView
+            Expanded(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  // Floating appbar
+                  SliverAppBar(
+                    backgroundColor: Colors.white,
+                    floating: true,
+                    elevation: 0,
+                    // TODO: implement search bar
+                    // SearchBar container
+                    title: GestureDetector(
+                      onTap: () {}, // Push to search screen
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: selectionMode == false
+                              ? Colors.grey[100]
+                              : Colors.grey[50],
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        child: Row(
+                          children: [
+                            // search icon
+                            Icon(
+                              Icons.search,
+                              color: selectionMode == false
+                                  ? Colors.black26
+                                  : Colors.black12,
+                            ),
+                            const SizedBox(width: 10),
+                            // "Search notes" text
+                            Text(
+                              'Search notes',
+                              style: TextStyle(
+                                color: selectionMode == false
+                                    ? Colors.black45
+                                    : Colors.black12,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
+                    ),
+                  ),
+
+                  // Main list body
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) {
+                        return NoteCard(
+                          note: currentNotes[i],
+                          refreshHomePageList: refreshCurrentNotes,
+                          selectionMode: selectionMode,
+                          activateSelectionMode: activateSelectionMode,
+                          addToSelectedNotes: addToSelectedNotes,
+                          removeFromSelectedNotes: removeFromSelectedNotes,
+                        );
+                      },
+                      childCount: currentNotes.length,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // The bottom delete button only enabled if in selection mode
+            selectionMode == false
+                ? const SizedBox()
+                : GestureDetector(
+                    onTap: () async {
+                      for (Note i in selectedNotes) {
+                        deleteNoteFromDB(i);
+                      }
+                    },
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          // search icon
                           Icon(
-                            Icons.search,
-                            color: Colors.black26,
+                            Icons.delete_outline,
+                            color: Colors.black54,
                           ),
-                          SizedBox(width: 10),
-                          // "Search notes" text
                           Text(
-                            'Search notes',
+                            'Delete',
                             style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-
-                // Main list body
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, i) {
-                      return NoteCard(
-                        note: currentNotes[i],
-                        refreshHomePageList: refreshCurrentNotes,
-                        selectionMode: selectionMode,
-                        activateSelectionMode: activateSelectionMode,
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: selectionMode == false
+            ? SizedBox(
+                width: 50,
+                height: 50,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    onPressed: () async {
+                      // creates a new empty Note object
+                      int newId = getNewId();
+                      Note newNote = Note(
+                        id: newId,
+                        timeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                        bgColor: getRandomColor().value,
                       );
+                      // adds the newNote to the Database
+                      await Provider.of<NotepadDatabase>(context, listen: false)
+                          .dbInsertNote(newNote);
+                      // pushes to noteEditing screen
+                      await pushToEditingScreen(newNote);
+                      // refresh the HomeScreen
+                      await refreshCurrentNotes();
                     },
-                    childCount: currentNotes.length,
+                    backgroundColor: Colors.green,
+                    tooltip: 'Create a new note',
+                    child: const Icon(Icons.add),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SizedBox(
-        width: 50,
-        height: 50,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () async {
-              // creates a new empty Note object
-              int newId = getNewId();
-              Note newNote = Note(
-                id: newId,
-                timeLastEdited: DateTime.now().millisecondsSinceEpoch,
-                bgColor: getRandomColor().value,
-              );
-              // adds the newNote to the Database
-              await Provider.of<NotepadDatabase>(context, listen: false)
-                  .dbInsertNote(newNote);
-              // pushes to noteEditing screen
-              await pushToEditingScreen(newNote);
-              refreshCurrentNotes();
-            },
-            backgroundColor: Colors.green,
-            tooltip: 'Create a new note',
-            child: const Icon(Icons.add),
-          ),
-        ),
+              )
+            : const SizedBox(),
       ),
     );
   }

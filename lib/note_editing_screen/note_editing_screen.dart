@@ -70,92 +70,58 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     DateTime timeLastEditedDateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: NormalAppBar(
-        // Passing the focusNodes to the appbar to control which icon shows
-        titleFocusNode: titleFocusNode,
-        bodyFocusNode: bodyFocusNode,
-        isEditing: isEditing,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Time last edited
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 18, 15, 10),
-            child: Text(
-              '${dayDateFormat.format(timeLastEditedDateTime)} '
-              '${hourDateFormat.format(timeLastEditedDateTime)}',
-              style: const TextStyle(
-                fontSize: 16.5,
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.note.title == '' && widget.note.body == '') {
+          await widget.mainDatabase.dbDeleteNote(widget.note.id);
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: NormalAppBar(
+          // Passing the focusNodes to the appbar to control which icon shows
+          titleFocusNode: titleFocusNode,
+          bodyFocusNode: bodyFocusNode,
+          isEditing: isEditing,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Time last edited
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 18, 15, 10),
+              child: Text(
+                '${dayDateFormat.format(timeLastEditedDateTime)} '
+                '${hourDateFormat.format(timeLastEditedDateTime)}',
+                style: const TextStyle(
+                  fontSize: 16.5,
+                ),
               ),
             ),
-          ),
 
-          // Title textField
-          TextField(
-            onChanged: (newValue) async {
-              if (newValue != widget.note.title) {
-                // Created an updated note object
-                Note noteTempForUpdate = widget.note;
-                noteTempForUpdate.updateNote(
-                  newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
-                  newTitle: newValue,
-                );
-                // Update the database with the updated note object
-                await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
-              }
-            },
-            focusNode: titleFocusNode,
-            controller: titleController,
-            decoration: const InputDecoration(
-              hintText: 'Title',
-              hintStyle: TextStyle(
-                fontSize: 21,
-                color: Colors.black38,
-                fontWeight: FontWeight.bold,
-                height: 1.5,
-              ),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              border: InputBorder.none,
-            ),
-            cursorColor: Colors.green,
-            cursorHeight: 30,
-            cursorWidth: 1.5,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-            ),
-            textCapitalization: TextCapitalization.sentences,
-            maxLines: null,
-          ),
-
-          // Body textField
-          Expanded(
-            child: TextField(
+            // Title textField
+            TextField(
               onChanged: (newValue) async {
-                if (newValue != widget.note.body) {
+                if (newValue != widget.note.title) {
                   // Created an updated note object
                   Note noteTempForUpdate = widget.note;
                   noteTempForUpdate.updateNote(
                     newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
-                    newBody: newValue,
+                    newTitle: newValue,
                   );
                   // Update the database with the updated note object
                   await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
                 }
               },
-              focusNode: bodyFocusNode,
-              controller: bodyController,
+              focusNode: titleFocusNode,
+              controller: titleController,
               decoration: const InputDecoration(
-                hintText: 'Note something down',
+                hintText: 'Title',
                 hintStyle: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 21,
                   color: Colors.black38,
+                  fontWeight: FontWeight.bold,
                   height: 1.5,
                 ),
                 contentPadding:
@@ -166,14 +132,56 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
               cursorHeight: 30,
               cursorWidth: 1.5,
               style: const TextStyle(
-                fontSize: 15.1,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
                 height: 1.5,
               ),
               textCapitalization: TextCapitalization.sentences,
               maxLines: null,
             ),
-          ),
-        ],
+
+            // Body textField
+            Expanded(
+              child: TextField(
+                onChanged: (newValue) async {
+                  if (newValue != widget.note.body) {
+                    // Created an updated note object
+                    Note noteTempForUpdate = widget.note;
+                    noteTempForUpdate.updateNote(
+                      newTimeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                      newBody: newValue,
+                    );
+                    // Update the database with the updated note object
+                    await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
+                  }
+                },
+                focusNode: bodyFocusNode,
+                controller: bodyController,
+                decoration: const InputDecoration(
+                  hintText: 'Note something down',
+                  hintStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black38,
+                    height: 1.5,
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  border: InputBorder.none,
+                ),
+                cursorColor: Colors.green,
+                cursorHeight: 30,
+                cursorWidth: 1.5,
+                style: const TextStyle(
+                  fontSize: 15.1,
+                  height: 1.5,
+                ),
+                textCapitalization: TextCapitalization.sentences,
+                maxLines: null,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

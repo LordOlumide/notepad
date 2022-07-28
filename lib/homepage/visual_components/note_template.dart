@@ -11,6 +11,8 @@ class NoteCard extends StatefulWidget {
   final Function refreshHomePageList;
   bool selectionMode;
   final Function activateSelectionMode;
+  final Function addToSelectedNotes;
+  final Function removeFromSelectedNotes;
 
   NoteCard({
     Key? key,
@@ -18,6 +20,8 @@ class NoteCard extends StatefulWidget {
     required this.refreshHomePageList,
     required this.selectionMode,
     required this.activateSelectionMode,
+    required this.addToSelectedNotes,
+    required this.removeFromSelectedNotes,
   }) : super(key: key);
 
   // bool whether this card is currently selected or not
@@ -28,11 +32,15 @@ class NoteCard extends StatefulWidget {
 }
 
 class _NoteCardState extends State<NoteCard> {
-
-  void toggleSelect() {
+  void toggleIsSelectedState() {
     setState(() {
       widget.isSelected = !widget.isSelected;
     });
+    if (widget.isSelected == true) {
+      widget.addToSelectedNotes(widget.note);
+    } else {
+      widget.removeFromSelectedNotes(widget.note);
+    }
   }
 
   @override
@@ -60,13 +68,15 @@ class _NoteCardState extends State<NoteCard> {
                       note: widget.note, mainDatabase: mainDatabase)))
               .then((_) => {widget.refreshHomePageList()});
         } else {
-          toggleSelect();
+          toggleIsSelectedState();
         }
       },
       onLongPress: () {
-        // If selection mode is not active, activate it.
+        // If selection mode is not active, activate it
+        // and set this card to selected
         if (widget.selectionMode == false) {
           widget.activateSelectionMode();
+          toggleIsSelectedState();
         }
       },
       child: Container(
@@ -128,7 +138,7 @@ class _NoteCardState extends State<NoteCard> {
                         value: widget.isSelected,
                         onChanged: (newValue) {
                           setState(() {
-                            toggleSelect();
+                            toggleIsSelectedState();
                           });
                         },
                         activeColor: Colors.green,
