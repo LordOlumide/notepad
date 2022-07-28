@@ -20,7 +20,7 @@ class NotepadDatabase {
     _database = openDatabase(
       join(await getDatabasesPath(), 'notepad_database.db'),
       onCreate: (db, version) {
-        //TODO: change the id to AUTOINCREMENT.
+        //TODO: change the id to AUTOINCREMENT or randomise reliably.
         return db.execute('CREATE TABLE notes('
             'id INTEGER PRIMARY KEY, title TEXT, body TEXT, '
             'timeLastEdited INTEGER, bgColor INTEGER)');
@@ -72,7 +72,6 @@ class NotepadDatabase {
     );
   }
 
-  //TODO: if title == "" & body == "", delete that note
   // Deletes a note from the "notes" database
   Future<void> dbDeleteNote(int id) async {
     final db = await _database;

@@ -1,16 +1,16 @@
 # notepad
 
-A new Flutter project.
+A notepad made using my Android phone's default notepad as reference.
+It uses SQLite as the database.
 
-## Getting Started
+## Goals
 
-This project is a starting point for a Flutter application.
+This project is a personal one made to learn how to:
+- use SQLite in practice,
+- write tests for flutter widgets,
+- use Themes to set light mode and dark mode based on system settings,
+- output desktop apps,
+- create a good search bar,
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Perhaps, I will add reminders that will notify the user with push notifications.
+The challenge is how to do this offline.

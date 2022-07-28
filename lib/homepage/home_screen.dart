@@ -12,10 +12,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  /// This List is for display purposes only. Not to be edited.
+  bool selectionMode = false;
+
+  /// Activates select mode
+  void activateSelectionMode() {
+    setState(() {
+      selectionMode = true;
+    });
+  }
+
+  /// This List is for display purposes only.
+  /// Does not affect the actual Database.
   List<Note> currentNotes = [];
 
-  // Deletes empty notes and refreshes the currentNotes list.
+  /// Deletes empty notes and refreshes the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object
     List<Note> tempCurrentNotes =
@@ -74,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     /// Pushes to the EditingScreen
     Future<void> pushToEditingScreen(Note newNote) {
       final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
@@ -117,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.white,
                   floating: true,
                   elevation: 0,
+                  // TODO: implement search bar
                   // SearchBar container
                   title: GestureDetector(
                     onTap: () {}, // Push to search screen
@@ -157,6 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       return NoteCard(
                         note: currentNotes[i],
                         refreshHomePageList: refreshCurrentNotes,
+                        selectionMode: selectionMode,
+                        activateSelectionMode: activateSelectionMode,
                       );
                     },
                     childCount: currentNotes.length,
