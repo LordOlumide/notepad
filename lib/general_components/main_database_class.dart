@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -41,20 +40,24 @@ class NotepadDatabase {
     );
   }
 
-  // Returns a list of all the notes in the "notes" database
+  // Returns a list of all the notes in the "notes" database sorted by timeLastEdited
   Future<List<Note>> dbGetNotes() async {
     final db = await _database;
 
     final List<Map<String, dynamic>> notesMap = await db.query('notes');
-    return List.generate(
-        notesMap.length,
-        (index) => Note(
-              id: notesMap[index]['id'],
-              title: notesMap[index]['title'],
-              body: notesMap[index]['body'],
-              timeLastEdited: notesMap[index]['timeLastEdited'],
-              bgColor: notesMap[index]['bgColor'],
-            ));
+    List<Note> returnListOfNotes = List.generate(
+      notesMap.length,
+      (index) => Note(
+        id: notesMap[index]['id'],
+        title: notesMap[index]['title'],
+        body: notesMap[index]['body'],
+        timeLastEdited: notesMap[index]['timeLastEdited'],
+        bgColor: notesMap[index]['bgColor'],
+      ),
+    );
+    returnListOfNotes
+        .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
+    return returnListOfNotes;
   }
 
   // Updates a note in the "notes" database
@@ -89,17 +92,4 @@ class NotepadDatabase {
 
     databaseFactory.deleteDatabase(path);
   }
-}
-
-Color returnRandomColor() {
-  List<Color> kNoteColorList = [
-    Colors.red[50]!,
-    Colors.yellow[50]!,
-    Colors.blue[50]!,
-    Colors.pink[50]!,
-    Colors.green[50]!,
-  ];
-  final random = Random();
-  Color chosenColor = kNoteColorList[random.nextInt(kNoteColorList.length)];
-  return chosenColor;
 }

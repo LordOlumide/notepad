@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/homepage/visual_components/note_template.dart';
 import 'package:notepad/general_components/note_object.dart';
+import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:notepad/general_components/miscellaneous_functions.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,13 +18,26 @@ class _HomeScreenState extends State<HomeScreen> {
   // To refresh the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object
-    print('before refreshing');
     final tempCurrentNotes =
         await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
+    tempCurrentNotes
+        .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
     setState(() {
       currentNotes = tempCurrentNotes;
     });
-    print('after refreshing');
+  }
+
+  /// gets all current IDs, sorts them in a list,
+  /// returns 'the last item in the list' + 1.
+  int getNewId() {
+    // TODO: Make this algorithm more efficient. It doesn't account for deleted Notes.
+    // Use a UUID package.
+    List<int> listOfActiveIds = [];
+    for (Note i in currentNotes) {
+      listOfActiveIds.add(i.id);
+    }
+    listOfActiveIds.sort((a, b) => a.compareTo(b));
+    return listOfActiveIds.last + 1;
   }
 
   @override
@@ -34,6 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> pushToEditingScreen(Note newNote) {
+      final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
+      return Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => NoteEditingScreen(
+                note: newNote,
+                mainDatabase: mainDatabase,
+              )));
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       // Empty appbar to configure the status bar
@@ -116,6 +140,35 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        width: 50,
+        height: 50,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () async {
+              // creates a new empty Note object
+              // TODO: sort out the note id assignment
+              int newId = getNewId();
+              Note newNote = Note(
+                id: newId,
+                timeLastEdited: DateTime.now().millisecondsSinceEpoch,
+                bgColor: getRandomColor().value,
+              );
+              // adds the newNote to the Database
+              await Provider.of<NotepadDatabase>(context, listen: false)
+                  .dbInsertNote(newNote);
+              // pushes to noteEditing screen
+              await pushToEditingScreen(newNote);
+              // TODO: check for empty notes and delete them
+              refreshCurrentNotes();
+            },
+            backgroundColor: Colors.green,
+            tooltip: 'Create a new note',
+            child: const Icon(Icons.add),
+          ),
+        ),
       ),
     );
   }

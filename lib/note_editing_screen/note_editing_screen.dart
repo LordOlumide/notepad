@@ -10,6 +10,13 @@ import 'package:notepad/note_editing_screen/visual_components/'
 class NoteEditingScreen extends StatefulWidget {
   final Note note;
   final NotepadDatabase mainDatabase;
+  // It appears I have to pass the mainDatabase as an argument instead of just
+  // accessing it with Provider because I didn't provide the Provider at the
+  // MaterialApp level. Navigator is Linked to the MaterialApp.
+  // Meanwhile, I can't provide at the material app level because I must
+  // initialize the Database before providing.
+  // There should be a way to fix it by removing the loadingScreen and
+  // working it out in main.dart.
 
   const NoteEditingScreen(
       {Key? key, required this.note, required this.mainDatabase})

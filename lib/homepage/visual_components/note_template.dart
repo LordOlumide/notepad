@@ -31,16 +31,17 @@ class _NoteCardState extends State<NoteCard> {
 
     return GestureDetector(
       onTap: () {
+        // Get the mainDatabase and push to NoteEditing screen with it.
+        // An error prevented me from using Provider to get the DB in NoteEditingScreen.
         NotepadDatabase mainDatabase =
             Provider.of<NotepadDatabase>(context, listen: false);
         Navigator.of(context)
             .push(MaterialPageRoute(
                 builder: (context) => NoteEditingScreen(
                     note: widget.note, mainDatabase: mainDatabase)))
-            .then((value) => {
-                  setState(() {
-                    widget.refreshHomePageList();
-                  })
+            .then((_) => {
+                  // todo: check for empty notes and delete them.
+                  widget.refreshHomePageList()
                 });
       },
       child: Container(

@@ -16,9 +16,9 @@ class Note {
 
   // Updates the Note
   updateNote({
+    required int newTimeLastEdited,
     String? newTitle,
     String? newBody,
-    required int newTimeLastEdited,
   }) {
     timeLastEdited = newTimeLastEdited;
     title = newTitle ?? title;

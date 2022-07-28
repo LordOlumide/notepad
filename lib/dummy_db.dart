@@ -10,7 +10,7 @@ List<Note> dummyDatabase = [
       quis mattis felis elementum quis. Nullam gravida ipsum eget 
       aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
       sed augue. Mauris vel ligula cursus, fermentum turpis ac''',
-    timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
+    timeLastEdited: DateTime(2022, 1, 11, 17, 30).millisecondsSinceEpoch,
     bgColor: Colors.pink[50]!.value,
   ),
   Note(
@@ -21,7 +21,7 @@ List<Note> dummyDatabase = [
     quis mattis felis elementum quis. Nullam gravida ipsum eget 
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
-    timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
+    timeLastEdited: DateTime(2022, 2, 11, 17, 30).millisecondsSinceEpoch,
     bgColor: Colors.red[50]!.value,
   ),
   Note(
@@ -32,7 +32,7 @@ List<Note> dummyDatabase = [
     quis mattis felis elementum quis. Nullam gravida ipsum eget 
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
-    timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
+    timeLastEdited: DateTime(2022, 4, 11, 17, 30).millisecondsSinceEpoch,
     bgColor: Colors.blue[50]!.value,
   ),
   Note(
@@ -43,14 +43,14 @@ List<Note> dummyDatabase = [
     quis mattis felis elementum quis. Nullam gravida ipsum eget 
     aliquet pellentesque. Sed at risus sed mi ornare pulvinar et 
     sed augue. Mauris vel ligula cursus, fermentum turpis ac,''',
-    timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
+    timeLastEdited: DateTime(2022, 5, 11, 17, 30).millisecondsSinceEpoch,
     bgColor: Colors.red[50]!.value,
   ),
   Note(
     id: 5,
     title: 'Really, the most correct way to wash out hiding lines from jeans',
     body: 'Lorem ipsum',
-    timeLastEdited: DateTime(2022, 7, 11, 17, 30).millisecondsSinceEpoch,
+    timeLastEdited: DateTime(2022, 6, 11, 17, 30).millisecondsSinceEpoch,
     bgColor: Colors.green[50]!.value,
   ),
   Note(
