@@ -79,7 +79,7 @@ class NotepadDatabase {
 
     await db.delete(
       'notes',
-      where: 'id: ?',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }

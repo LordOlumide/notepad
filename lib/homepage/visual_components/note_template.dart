@@ -40,7 +40,6 @@ class _NoteCardState extends State<NoteCard> {
                 builder: (context) => NoteEditingScreen(
                     note: widget.note, mainDatabase: mainDatabase)))
             .then((_) => {
-                  // todo: check for empty notes and delete them.
                   widget.refreshHomePageList()
                 });
       },

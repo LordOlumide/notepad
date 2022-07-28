@@ -15,11 +15,36 @@ class _HomeScreenState extends State<HomeScreen> {
   /// This List is for display purposes only. Not to be edited.
   List<Note> currentNotes = [];
 
-  // To refresh the currentNotes list.
+  // Deletes empty notes and refreshes the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object
-    final tempCurrentNotes =
+    List<Note> tempCurrentNotes =
         await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
+
+    // TODO: Find another way to delete notes without checking every note.
+    // Deleting empty notes
+    List<Note> notesToBeRemoved = [];
+    // select the empty notes
+    for (Note i in tempCurrentNotes) {
+      if (i.title == '' && i.body == '') {
+        notesToBeRemoved.add(i);
+      }
+    }
+    // remove the deleted note from tempNotes
+    for (Note i in notesToBeRemoved) {
+      // remove from database
+      if (mounted) {
+        await Provider.of<NotepadDatabase>(context, listen: false).dbDeleteNote(i.id);
+      } else {
+        // TODO: delete all print statements in the app. Maybe delete this recursion.
+        print('Problem with buildContext across async gap. Re-trying...');
+        refreshCurrentNotes();
+      }
+      // remove from display list
+      tempCurrentNotes.remove(i);
+    }
+
+    // Sort tempNotes and refresh the screen
     tempCurrentNotes
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
     setState(() {
@@ -49,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /// Pushes to the EditingScreen
     Future<void> pushToEditingScreen(Note newNote) {
       final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
       return Navigator.of(context).push(MaterialPageRoute(
@@ -149,7 +175,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: FloatingActionButton(
             onPressed: () async {
               // creates a new empty Note object
-              // TODO: sort out the note id assignment
               int newId = getNewId();
               Note newNote = Note(
                 id: newId,
@@ -161,7 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   .dbInsertNote(newNote);
               // pushes to noteEditing screen
               await pushToEditingScreen(newNote);
-              // TODO: check for empty notes and delete them
               refreshCurrentNotes();
             },
             backgroundColor: Colors.green,
