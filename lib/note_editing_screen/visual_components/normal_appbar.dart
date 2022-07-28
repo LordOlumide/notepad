@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 
-class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
+class NormalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final FocusNode titleFocusNode;
   final FocusNode bodyFocusNode;
+  bool isEditing;
 
-  const NormalAppBar({
+  NormalAppBar({
     required this.titleFocusNode,
-    required this.bodyFocusNode
+    required this.bodyFocusNode,
+    required this.isEditing,
   });
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
 
+  @override
+  State<NormalAppBar> createState() => _NormalAppBarState();
+}
+
+class _NormalAppBarState extends State<NormalAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -26,6 +33,8 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       titleSpacing: 4,
+      elevation: 0,
+      backgroundColor: Colors.white,
       title: const Text(
         'Note',
         style: TextStyle(
@@ -35,19 +44,27 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.more_vert,
-            color: Colors.green,
-          ),
-          onPressed: () {
-            bodyFocusNode.unfocus();
-            titleFocusNode.unfocus();
-          },
-        ),
+        widget.isEditing
+            ? IconButton(
+                icon: const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  widget.bodyFocusNode.unfocus();
+                  widget.titleFocusNode.unfocus();
+                },
+              )
+            : IconButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  // TODO: Implement menu
+                },
+              ),
       ],
-      elevation: 0,
-      backgroundColor: Colors.white,
     );
   }
 }
