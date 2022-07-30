@@ -32,19 +32,21 @@ class NoteCard extends StatefulWidget {
 }
 
 class _NoteCardState extends State<NoteCard> {
-  void toggleIsSelectedState() {
-    setState(() {
-      widget.isSelected = !widget.isSelected;
-    });
-    if (widget.isSelected == true) {
-      widget.addToSelectedNotes(widget.note);
-    } else {
-      widget.removeFromSelectedNotes(widget.note);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    void toggleIsSelectedstate() {
+      // set this card to selected
+      setState(() {
+        widget.isSelected = !widget.isSelected;
+      });
+      // if (widget.isSelected == true) {
+      //   widget.addToSelectedNotes(widget.note);
+      // } else {
+      //   widget.removeFromSelectedNotes(widget.note);
+      // }
+    }
+
     // Prepare the date and time formats with intl
     DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
     DateFormat hourDateFormat = DateFormat.jm(); // time
@@ -68,7 +70,9 @@ class _NoteCardState extends State<NoteCard> {
                       note: widget.note, mainDatabase: mainDatabase)))
               .then((_) => {widget.refreshHomePageList()});
         } else {
-          toggleIsSelectedState();
+          print(widget.isSelected);
+          toggleIsSelectedstate();
+          print(widget.isSelected);
         }
       },
       onLongPress: () {
@@ -76,7 +80,12 @@ class _NoteCardState extends State<NoteCard> {
         // and set this card to selected
         if (widget.selectionMode == false) {
           widget.activateSelectionMode();
-          toggleIsSelectedState();
+          // set isSelected to true
+          print(widget.isSelected);
+          setState(() {
+            widget.isSelected = true;
+          });
+          print(widget.isSelected);
         }
       },
       child: Container(
@@ -136,11 +145,7 @@ class _NoteCardState extends State<NoteCard> {
                     child: FittedBox(
                       child: Checkbox(
                         value: widget.isSelected,
-                        onChanged: (newValue) {
-                          setState(() {
-                            toggleIsSelectedState();
-                          });
-                        },
+                        onChanged: (_) {},
                         activeColor: Colors.green,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(3)),
