@@ -6,88 +6,35 @@ import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/general_components/miscellaneous_functions.dart';
 
-// README: I created two Lists, currentNotes and current States to contain
-// "the notes currently in the database" and "whether each note is currently
-// selected or not" respectively. These Lists do not affect the actual DB and
-// are for display and state purposes only.
-// I use functions from the NotepadDatabase class to interact with the database
-// directly.
-
 class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool selectionMode = false;
-  bool allNotesAreSelected = false;
-
-  List<Note> selectedNotes = [];
-
-  /// Activates selection Mode and set the passed note to selected
-  void activateSelectionMode(Note selectionModeActivationNote) {
-    setState(() {
-      selectionMode = true;
-    });
-    toggleNoteState(selectionModeActivationNote, isSelectedState: true);
-  }
-
-  void deactivateSelectionMode() {
-    // clear the current selection
-    selectedNotes.clear();
-    // set all the currentStates to false
-    for (int i = 0; i < currentStates.length; i++) {
-      currentStates[i] = false;
-    }
-    // set selectionMode to false
-    setState(() {
-      selectionMode = false;
-    });
-  }
-
-  // untested
-  void addToSelectedNotes(Note note) {
-    setState(() {
-      selectedNotes.add(note);
-    });
-  }
-
-  // untested
-  void removeFromSelectedNotes(Note note) {
-    setState(() {
-      selectedNotes.remove(note);
-    });
-  }
-
-  // untested
-  void toggleAllNotesSelection() {
-    // TODO: Implement
-    setState(() {
-      allNotesAreSelected = !allNotesAreSelected;
-    });
-    if (allNotesAreSelected == true) {
-      for (Note i in currentNotes) {
-        addToSelectedNotes(i);
-      }
-    } else {
-      // TODO: You'll have to update the noteCards with the selectedNotes List
-      for (Note i in selectedNotes) {
-        selectedNotes.remove(i);
-      }
-    }
-  }
+  // TODO: Ideally, the selectedNotes List will be used to control UI.
+  // TODO: If Note is in selectedNotes, isSelected = true, else, false. Alternatively, a Map would be much neater than this.
 
   /// This List is for display purposes only.
   /// Does not affect the actual Database.
   List<Note> currentNotes = [];
-  /// List of the currentStates that show whether each Note is selected or not
+  /// List of the currentStates that control
+  /// whether each Note shows as selected or not
   List<bool> currentStates = [];
+
+  /// bool for whether in selection mode or not
+  bool selectionMode = false;
+  /// bool for whether all notes are selected or not
+  bool allNotesAreSelected = false;
+
+  /// List for currently selected notes
+  List<Note> selectedNotes = [];
 
   /// Refreshes the currentNotes list.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object??
     List<Note> tempCurrentNotes =
-        await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
+    await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
     // Sort tempNotes
     tempCurrentNotes
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
@@ -103,21 +50,108 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  /// Activates selection Mode and set the passed note to selected
+  void activateSelectionMode(Note selectionModeActivationNote) {
+    setState(() {
+      selectionMode = true;
+    });
+    toggleNoteState(selectionModeActivationNote, isSelectedState: true);
+  }
+
+  /// Clears the selectedNotes List and set selectionMode to false
+  void deactivateSelectionMode() {
+    // clear the current selection
+    selectedNotes.clear();
+    // set all the currentStates to false
+    for (int i = 0; i < currentStates.length; i++) {
+      currentStates[i] = false;
+    }
+    // set selectionMode to false
+    setState(() {
+      selectionMode = false;
+    });
+  }
+
+  /// Does not affect UI
+  void addToSelectedNotes(Note note) {
+    setState(() {
+      selectedNotes.add(note);
+    });
+  }
+
+  /// Does not affect UI
+  void removeFromSelectedNotes(Note note) {
+    setState(() {
+      selectedNotes.remove(note);
+    });
+  }
+
   /// Changes the state of the note passed into it. true to false / vice versa.
   /// Optional parameter isSelectedState to set it to a particular bool.
+  /// Then, it adds or removes the note from selectedNotes.
   void toggleNoteState(Note note, {bool? isSelectedState}) {
+    // Get index of note in question
     int index = currentNotes.indexOf(note);
-    // is a bool is passed, set the state to that bool and return
+    // If a bool is passed, set the state to that bool
+    // else, invert the current state
     if (isSelectedState != null) {
       setState(() {
         currentStates[index] = isSelectedState;
       });
     } else {
-      // else, invert the current state
       setState(() {
         currentStates[index] = !currentStates[index];
       });
-      print(currentStates);
+    }
+    // Add the note to selectedNotes if selected, else remove
+    if (currentStates[index] == true) {
+      addToSelectedNotes(note);
+    } else {
+      removeFromSelectedNotes(note);
+    }
+    // Check to see if all notes are selected
+    if (selectedNotes.length == currentNotes.length) {
+      setState(() {
+        allNotesAreSelected = true;
+      });
+    } else {
+      setState(() {
+        allNotesAreSelected = false;
+      });
+    }
+  }
+
+  // TODO: You'll have to update the noteCards with the selectedNotes List.
+  // TODO: Maybe create an interface class
+
+  void toggleAllNotesSelection() {
+    setState(() {
+      allNotesAreSelected = !allNotesAreSelected;
+    });
+    if (allNotesAreSelected == true) {
+      // remove every note already selected from selectedNotes, then add every note to it
+      selectedNotes.clear();
+      for (Note i in currentNotes) {
+        setState(() {
+          addToSelectedNotes(i);
+        });
+      }
+      // Update  UI
+      setState(() {
+        for (int i = 0; i < currentStates.length; i++) {
+          currentStates[i] = true;
+        }
+      });
+    } else {
+      setState(() {
+        selectedNotes.clear();
+      });
+      // Update  UI
+      setState(() {
+        for (int i = 0; i < currentStates.length; i++) {
+          currentStates[i] = false;
+        }
+      });
     }
   }
 
@@ -150,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(selectedNotes.length);
 
     /// Pushes to the EditingScreen
     Future<void> pushToEditingScreen(Note newNote) {
@@ -213,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(right: 15),
                     child: Checkbox(
                       value: allNotesAreSelected,
-                      onChanged: (newValue) {
+                      onChanged: (_) {
                         toggleAllNotesSelection();
                       },
                       activeColor: Colors.green,

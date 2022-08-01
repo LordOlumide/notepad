@@ -38,14 +38,6 @@ class _NoteCardState extends State<NoteCard> {
   @override
   Widget build(BuildContext context) {
 
-    void toggleIsSelectedstate() {
-      // if (widget.isSelected == true) {
-      //   widget.addToSelectedNotes(widget.note);
-      // } else {
-      //   widget.removeFromSelectedNotes(widget.note);
-      // }
-    }
-
     // Prepare the date and time formats with intl
     DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
     DateFormat hourDateFormat = DateFormat.jm(); // time
@@ -54,22 +46,30 @@ class _NoteCardState extends State<NoteCard> {
     DateTime timeLastEditedDateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
 
+    void onNormalModeTap() {
+      // Get the mainDatabase and push to NoteEditing screen with it.
+      // An error prevented me from using Provider to get the DB in NoteEditingScreen.
+      NotepadDatabase mainDatabase =
+      Provider.of<NotepadDatabase>(context, listen: false);
+      Navigator.of(context)
+          .push(MaterialPageRoute(
+          builder: (context) => NoteEditingScreen(
+              note: widget.note, mainDatabase: mainDatabase)))
+          .then((_) => {widget.refreshHomePage()});
+    }
+
+    void onSelectionModeTap() {
+      widget.toggleNoteState(widget.note);
+    }
+
     return GestureDetector(
       onTap: () {
         // If selection mode is false, move to editing screen
         // If selection mode is true, run the toggleSelected function
         if (widget.selectionMode == false) {
-          // Get the mainDatabase and push to NoteEditing screen with it.
-          // An error prevented me from using Provider to get the DB in NoteEditingScreen.
-          NotepadDatabase mainDatabase =
-              Provider.of<NotepadDatabase>(context, listen: false);
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => NoteEditingScreen(
-                      note: widget.note, mainDatabase: mainDatabase)))
-              .then((_) => {widget.refreshHomePage()});
+          onNormalModeTap();
         } else {
-          widget.toggleNoteState(widget.note, isSelectedState: true);
+          onSelectionModeTap();
         }
       },
       onLongPress: () {
@@ -136,7 +136,9 @@ class _NoteCardState extends State<NoteCard> {
                     child: FittedBox(
                       child: Checkbox(
                         value: widget.isSelected,
-                        onChanged: (_) {},
+                        onChanged: (_) {
+                          onSelectionModeTap();
+                        },
                         activeColor: Colors.green,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(3)),
