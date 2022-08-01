@@ -12,9 +12,6 @@ class NoteCard extends StatefulWidget {
   bool selectionMode;
   bool isSelected;
   final Function activateSelectionMode;
-  final Function addToSelectedNotes;
-  final Function removeFromSelectedNotes;
-
   final toggleNoteState;
 
   NoteCard({
@@ -24,9 +21,6 @@ class NoteCard extends StatefulWidget {
     required this.selectionMode,
     required this.isSelected,
     required this.activateSelectionMode,
-    required this.addToSelectedNotes,
-    required this.removeFromSelectedNotes,
-
     required this.toggleNoteState,
   }) : super(key: key);
 

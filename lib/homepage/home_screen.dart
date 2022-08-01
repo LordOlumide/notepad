@@ -18,23 +18,25 @@ class _HomeScreenState extends State<HomeScreen> {
   /// This List is for display purposes only.
   /// Does not affect the actual Database.
   List<Note> currentNotes = [];
+
   /// List of the currentStates that control
   /// whether each Note shows as selected or not
   List<bool> currentStates = [];
 
   /// bool for whether in selection mode or not
   bool selectionMode = false;
+
   /// bool for whether all notes are selected or not
   bool allNotesAreSelected = false;
 
   /// List for currently selected notes
   List<Note> selectedNotes = [];
 
-  /// Refreshes the currentNotes list.
+  /// Refreshes the currentNotes and currentStates lists.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object??
     List<Note> tempCurrentNotes =
-    await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
+        await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
     // Sort tempNotes
     tempCurrentNotes
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
@@ -122,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // TODO: You'll have to update the noteCards with the selectedNotes List.
-  // TODO: Maybe create an interface class
+  // TODO: Maybe create an interface class, maybe not
 
   void toggleAllNotesSelection() {
     setState(() {
@@ -155,15 +157,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> deleteNoteFromDB(Note note) async {
-    if (mounted) {
-      await Provider.of<NotepadDatabase>(context, listen: false)
-          .dbDeleteNote(note.id);
+  Future<void> deleteSelectedNotesFromDB(List<Note> notesToDelete) async {
+    List<Note> tempNotesToDelete = [...notesToDelete];
+    for (Note note in tempNotesToDelete) {
+      selectedNotes.remove(note);
+      if (mounted) {
+        await Provider.of<NotepadDatabase>(context, listen: false)
+            .dbDeleteNote(note.id);
+      }
     }
+    refreshCurrentNotes();
   }
 
-  /// gets all current IDs, sorts them in a list,
-  /// returns 'the last item in the list' + 1.
   int getNewId() {
     // TODO: Make this algorithm better and more efficient. It doesn't account for deleted Notes.
     // Maybe find a UUID package.
@@ -172,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
       listOfActiveIds.add(i.id);
     }
     listOfActiveIds.sort((a, b) => a.compareTo(b));
-    return listOfActiveIds.last + 1;
+    return listOfActiveIds.isNotEmpty ? listOfActiveIds.last + 1 : 1;
   }
 
   @override
@@ -184,8 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedNotes.length);
-
     /// Pushes to the EditingScreen
     Future<void> pushToEditingScreen(Note newNote) {
       final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
@@ -335,9 +338,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectionMode: selectionMode,
                           isSelected: currentStates[i],
                           activateSelectionMode: activateSelectionMode,
-                          addToSelectedNotes: addToSelectedNotes,
-                          removeFromSelectedNotes: removeFromSelectedNotes,
-
                           toggleNoteState: toggleNoteState,
                         );
                       },
@@ -353,24 +353,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const SizedBox()
                 : GestureDetector(
                     onTap: () async {
-                      for (Note i in selectedNotes) {
-                        deleteNoteFromDB(i);
+                      await showDialog(
+                          context: context,
+                          builder: (context) => const Dialog(child: Text('Dialog')),
+                      );
+                      if (selectedNotes.isNotEmpty) {
+                        deleteSelectedNotesFromDB(selectedNotes);
+                        deactivateSelectionMode();
                       }
                     },
-                    child: SizedBox(
+                    child: Container(
+                      margin: const EdgeInsets.all(0),
                       width: MediaQuery.of(context).size.width,
                       height: 55,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.delete_outline,
-                            color: Colors.black54,
+                            color: selectedNotes.isEmpty
+                                ? Colors.black26
+                                : Colors.black54,
                           ),
                           Text(
                             'Delete',
                             style: TextStyle(
                               fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: selectedNotes.isEmpty
+                                  ? Colors.black26
+                                  : Colors.black54,
                             ),
                           ),
                         ],
