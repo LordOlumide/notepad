@@ -28,6 +28,7 @@ class Note {
   // Converts the Note object to a Map for the database
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'body': body,
       'timeLastEdited': timeLastEdited,
@@ -39,6 +40,7 @@ class Note {
   @override
   String toString() {
     return 'Note{'
+        'id: $id,'
         'title: ${title.substring(0, title.length > 25 ? 25 : null)}, '
         'body: ${body.substring(0, body.length > 25 ? 25 : null)}, '
         'timeLastEdited: $timeLastEdited, '

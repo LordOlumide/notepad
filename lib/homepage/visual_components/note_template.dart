@@ -8,24 +8,27 @@ import 'package:notepad/general_components/main_database_class.dart';
 
 class NoteCard extends StatefulWidget {
   final Note note;
-  final Function refreshHomePageList;
+  final Function refreshHomePage;
   bool selectionMode;
+  bool isSelected;
   final Function activateSelectionMode;
   final Function addToSelectedNotes;
   final Function removeFromSelectedNotes;
 
+  final toggleNoteState;
+
   NoteCard({
     Key? key,
     required this.note,
-    required this.refreshHomePageList,
+    required this.refreshHomePage,
     required this.selectionMode,
+    required this.isSelected,
     required this.activateSelectionMode,
     required this.addToSelectedNotes,
     required this.removeFromSelectedNotes,
-  }) : super(key: key);
 
-  // bool whether this card is currently selected or not
-  bool isSelected = false;
+    required this.toggleNoteState,
+  }) : super(key: key);
 
   @override
   State<NoteCard> createState() => _NoteCardState();
@@ -36,10 +39,6 @@ class _NoteCardState extends State<NoteCard> {
   Widget build(BuildContext context) {
 
     void toggleIsSelectedstate() {
-      // set this card to selected
-      setState(() {
-        widget.isSelected = !widget.isSelected;
-      });
       // if (widget.isSelected == true) {
       //   widget.addToSelectedNotes(widget.note);
       // } else {
@@ -68,24 +67,16 @@ class _NoteCardState extends State<NoteCard> {
               .push(MaterialPageRoute(
                   builder: (context) => NoteEditingScreen(
                       note: widget.note, mainDatabase: mainDatabase)))
-              .then((_) => {widget.refreshHomePageList()});
+              .then((_) => {widget.refreshHomePage()});
         } else {
-          print(widget.isSelected);
-          toggleIsSelectedstate();
-          print(widget.isSelected);
+          widget.toggleNoteState(widget.note, isSelectedState: true);
         }
       },
       onLongPress: () {
         // If selection mode is not active, activate it
         // and set this card to selected
         if (widget.selectionMode == false) {
-          widget.activateSelectionMode();
-          // set isSelected to true
-          print(widget.isSelected);
-          setState(() {
-            widget.isSelected = true;
-          });
-          print(widget.isSelected);
+          widget.activateSelectionMode(widget.note);
         }
       },
       child: Container(
