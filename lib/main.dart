@@ -10,15 +10,21 @@ import 'package:flutter/services.dart';
 // You can add Team editing. Friend features.
 // You can do the write-passing program where in a Team editing note,
 // one person must edit the same Document.
-// Maybe this should'nt be a notepad app, but a documents app.
+// Maybe this shouldn't be a notepad app, but a documents app.
 
 // Note: The main Database is initialized in the Loading Screen.
 // The Provider is wrapped around the HomeScreen from the LoadingScreen.
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   // Set the status bar color to transparent
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent,
   ));
 
   runApp(NotepadApp());

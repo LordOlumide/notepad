@@ -12,8 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // TODO: Ideally, the selectedNotes List will be used to control UI.
-  // TODO: If Note is in selectedNotes, isSelected = true, else, false. Alternatively, a Map would be much neater than this.
 
   /// This List is for display purposes only.
   /// Does not affect the actual Database.
@@ -74,20 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  /// Does not affect UI
-  void addToSelectedNotes(Note note) {
-    setState(() {
-      selectedNotes.add(note);
-    });
-  }
-
-  /// Does not affect UI
-  void removeFromSelectedNotes(Note note) {
-    setState(() {
-      selectedNotes.remove(note);
-    });
-  }
-
   /// Changes the state of the note passed into it. true to false / vice versa.
   /// Optional parameter isSelectedState to set it to a particular bool.
   /// Then, it adds or removes the note from selectedNotes.
@@ -107,9 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     // Add the note to selectedNotes if selected, else remove
     if (currentStates[index] == true) {
-      addToSelectedNotes(note);
+      selectedNotes.add(note);
     } else {
-      removeFromSelectedNotes(note);
+      selectedNotes.remove(note);
     }
     // Check to see if all notes are selected
     if (selectedNotes.length == currentNotes.length) {
@@ -123,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // TODO: You'll have to update the noteCards with the selectedNotes List.
+  // TODO: selectedNoted and currentStates are redundant
   // TODO: Maybe create an interface class, maybe not
 
   void toggleAllNotesSelection() {
@@ -134,9 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // remove every note already selected from selectedNotes, then add every note to it
       selectedNotes.clear();
       for (Note i in currentNotes) {
-        setState(() {
-          addToSelectedNotes(i);
-        });
+        selectedNotes.add(i);
       }
       // Update  UI
       setState(() {
@@ -283,13 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: CustomScrollView(
                 slivers: <Widget>[
-                  // Floating appbar
+                  // TODO: implement search bar
+                  // Floating Search Bar
                   SliverAppBar(
                     backgroundColor: Colors.white,
                     floating: true,
                     elevation: 0,
-                    // TODO: implement search bar
-                    // SearchBar container
                     title: GestureDetector(
                       onTap: () {}, // Push to search screen
                       child: Container(

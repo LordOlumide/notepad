@@ -6,13 +6,13 @@ import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 
-class NoteCard extends StatefulWidget {
+class NoteCard extends StatelessWidget {
   final Note note;
   final Function refreshHomePage;
   bool selectionMode;
   bool isSelected;
   final Function activateSelectionMode;
-  final toggleNoteState;
+  final Function toggleNoteState;
 
   NoteCard({
     Key? key,
@@ -25,11 +25,6 @@ class NoteCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<NoteCard> createState() => _NoteCardState();
-}
-
-class _NoteCardState extends State<NoteCard> {
-  @override
   Widget build(BuildContext context) {
 
     // Prepare the date and time formats with intl
@@ -38,7 +33,7 @@ class _NoteCardState extends State<NoteCard> {
 
     // Actual time last edited in DateTime format
     DateTime timeLastEditedDateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.note.timeLastEdited);
+        DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
 
     void onNormalModeTap() {
       // Get the mainDatabase and push to NoteEditing screen with it.
@@ -48,19 +43,19 @@ class _NoteCardState extends State<NoteCard> {
       Navigator.of(context)
           .push(MaterialPageRoute(
           builder: (context) => NoteEditingScreen(
-              note: widget.note, mainDatabase: mainDatabase)))
-          .then((_) => {widget.refreshHomePage()});
+              note: note, mainDatabase: mainDatabase)))
+          .then((_) => {refreshHomePage()});
     }
 
     void onSelectionModeTap() {
-      widget.toggleNoteState(widget.note);
+      toggleNoteState(note);
     }
 
     return GestureDetector(
       onTap: () {
         // If selection mode is false, move to editing screen
         // If selection mode is true, run the toggleSelected function
-        if (widget.selectionMode == false) {
+        if (selectionMode == false) {
           onNormalModeTap();
         } else {
           onSelectionModeTap();
@@ -69,15 +64,15 @@ class _NoteCardState extends State<NoteCard> {
       onLongPress: () {
         // If selection mode is not active, activate it
         // and set this card to selected
-        if (widget.selectionMode == false) {
-          widget.activateSelectionMode(widget.note);
+        if (selectionMode == false) {
+          activateSelectionMode(note);
         }
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
         decoration: BoxDecoration(
-          color: Color(widget.note.bgColor),
+          color: Color(note.bgColor),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -90,9 +85,9 @@ class _NoteCardState extends State<NoteCard> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
                     child: Text(
-                      widget.note.title != ''
-                          ? widget.note.title
-                          : widget.note.body,
+                      note.title != ''
+                          ? note.title
+                          : note.body,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: kTitleTextStyle,
@@ -100,9 +95,9 @@ class _NoteCardState extends State<NoteCard> {
                   ),
 
                   // Body
-                  widget.note.title != ''
+                  note.title != ''
                       ? Text(
-                          widget.note.body,
+                          note.body,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: kBodyTextStyle,
@@ -123,13 +118,13 @@ class _NoteCardState extends State<NoteCard> {
             ),
 
             // CheckBox for selection. Active and visible only in selection mode
-            widget.selectionMode
+            selectionMode
                 ? SizedBox(
                     width: 45,
                     height: 45,
                     child: FittedBox(
                       child: Checkbox(
-                        value: widget.isSelected,
+                        value: isSelected,
                         onChanged: (_) {
                           onSelectionModeTap();
                         },
