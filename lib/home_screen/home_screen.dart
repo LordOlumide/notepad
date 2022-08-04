@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/main_database_class.dart';
-import 'package:notepad/homepage/visual_components/note_template.dart';
+import 'package:notepad/home_screen/visual_components/note_template.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
+import 'package:notepad/search_screen/search_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/general_components/miscellaneous_functions.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const screenId = 'home_screen';
+
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   /// This List is for display purposes only.
   /// Does not affect the actual Database.
   List<Note> currentNotes = [];
 
-  /// List of the currentStates that control
-  /// whether each Note shows as selected or not
+  /// List that controls whether each Note shows as selected or not
   List<bool> currentStates = [];
 
   /// bool for whether in selection mode or not
@@ -107,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // TODO: selectedNoted and currentStates are redundant
   // TODO: Maybe create an interface class, maybe not
 
   void toggleAllNotesSelection() {
@@ -171,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /// Pushes to the EditingScreen
+
     Future<void> pushToEditingScreen(Note newNote) {
       final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
       return Navigator.of(context).push(MaterialPageRoute(
@@ -179,6 +181,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 note: newNote,
                 mainDatabase: mainDatabase,
               )));
+    }
+
+    Future<void> pushToSearchScreen(){
+      final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
+      return Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => SearchScreen(
+              mainDatabase: mainDatabase,
+            )),
+      );
     }
 
     return WillPopScope(
@@ -272,7 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     floating: true,
                     elevation: 0,
                     title: GestureDetector(
-                      onTap: () {}, // Push to search screen
+                      onTap: () {
+                        pushToSearchScreen();
+                      }, // Push to search screen
                       child: Container(
                         height: 40,
                         decoration: BoxDecoration(
@@ -335,8 +349,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 : GestureDetector(
                     onTap: () async {
                       await showDialog(
-                          context: context,
-                          builder: (context) => const Dialog(child: Text('Dialog')),
+                        context: context,
+                        builder: (context) =>
+                            const Dialog(child: Text('Dialog')),
                       );
                       if (selectedNotes.isNotEmpty) {
                         deleteSelectedNotesFromDB(selectedNotes);

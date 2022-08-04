@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'loading_screen.dart';
 import 'package:flutter/services.dart';
+// screens
+import 'loading_screen.dart';
 
-// TODO: Make it able to export as .docx or .pdf
-
-// TODO: Make the app live on the net. Make it have user accounts.
+// Ideas:
+//
+// Make the app live on the net. Make it have user accounts.
+// Make it able to export as .docx or .pdf
 // Each user can store their notes online and sync to it.
 // Notes are shareable with links and permissions.
 // You can add Team editing. Friend features.
@@ -12,9 +14,11 @@ import 'package:flutter/services.dart';
 // one person must edit the same Document.
 // Maybe this shouldn't be a notepad app, but a documents app.
 
-// Note: The main Database is initialized in the Loading Screen.
+
+// The main Database is initialized in the Loading Screen.
 // The Provider is wrapped around the HomeScreen from the LoadingScreen.
 
+// TODO: Why is Provider not reaching the downstream screens: search screen and noteediting screen?
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([

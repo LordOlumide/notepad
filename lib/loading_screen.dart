@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/homepage/home_screen.dart';
+import 'package:notepad/home_screen/home_screen.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/dummy_db.dart';
 
 class LoadingScreen extends StatefulWidget {
+  static const screenId = 'loading_screen';
+
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override
@@ -56,7 +58,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('images/notepad.jpg'),
+            Flexible(child: Image.asset('images/notepad.jpg')),
             const CircularProgressIndicator(),
           ],
         ),

@@ -8,6 +8,8 @@ import 'package:notepad/note_editing_screen/visual_components/'
     'normal_appbar.dart';
 
 class NoteEditingScreen extends StatefulWidget {
+  static const screenId = 'note_editing_screen';
+
   final Note note;
   final NotepadDatabase mainDatabase;
   // It appears I have to pass the mainDatabase as an argument instead of just

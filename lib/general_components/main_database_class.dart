@@ -45,7 +45,7 @@ class NotepadDatabase {
     final db = await _database;
 
     final List<Map<String, dynamic>> notesMap = await db.query('notes');
-    List<Note> returnListOfNotes = List.generate(
+    List<Note> listOfNotesToReturn = List.generate(
       notesMap.length,
       (index) => Note(
         id: notesMap[index]['id'],
@@ -55,9 +55,9 @@ class NotepadDatabase {
         bgColor: notesMap[index]['bgColor'],
       ),
     );
-    returnListOfNotes
+    listOfNotesToReturn
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
-    return returnListOfNotes;
+    return listOfNotesToReturn;
   }
 
   // Updates a note in the "notes" database
@@ -81,6 +81,30 @@ class NotepadDatabase {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // Queries the "notes" database
+  Future<List<Note>> dbQueryNotes(String? queryTerm) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> notesMap =
+        await db.query(
+          'notes',
+          where: 'title LIKE ?',
+          whereArgs: ['%$queryTerm%'],
+          orderBy: 'timeLastEdited',
+        );
+    List<Note> listOfNotesToReturn = List.generate(
+      notesMap.length,
+          (index) => Note(
+        id: notesMap[index]['id'],
+        title: notesMap[index]['title'],
+        body: notesMap[index]['body'],
+        timeLastEdited: notesMap[index]['timeLastEdited'],
+        bgColor: notesMap[index]['bgColor'],
+      ),
+    );
+    return listOfNotesToReturn;
   }
 
   /// For development purposes

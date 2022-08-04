@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:notepad/homepage/homescreen_constants.dart';
+import 'package:notepad/home_screen/homescreen_constants.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:provider/provider.dart';
