@@ -83,15 +83,15 @@ class NotepadDatabase {
     );
   }
 
-  // Queries the "notes" database
+  // Queries the "notes" database. Returns sorted List of notes
   Future<List<Note>> dbQueryNotes(String? queryTerm) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> notesMap =
         await db.query(
           'notes',
-          where: 'title LIKE ?',
-          whereArgs: ['%$queryTerm%'],
+          where: 'title LIKE ? OR body LIKE ?',
+          whereArgs: ['%$queryTerm%', '%$queryTerm%'],
           orderBy: 'timeLastEdited',
         );
     List<Note> listOfNotesToReturn = List.generate(
@@ -103,7 +103,7 @@ class NotepadDatabase {
         timeLastEdited: notesMap[index]['timeLastEdited'],
         bgColor: notesMap[index]['bgColor'],
       ),
-    );
+    ).reversed.toList();
     return listOfNotesToReturn;
   }
 

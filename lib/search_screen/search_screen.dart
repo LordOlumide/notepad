@@ -25,15 +25,20 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // TODO: test your query algorithm with 10,000 notes
   Future<void> queryDatabase(String queryTerm) async {
-    List<Note> results = await widget.mainDatabase.dbQueryNotes(queryTerm);
-    setState(() {
-      currentBuild = results;
-    });
-    print(results);
+    if (queryTerm == '') {
+      setState(() {
+        currentBuild = [];
+      });
+    } else {
+      List<Note> results = await widget.mainDatabase.dbQueryNotes(queryTerm);
+      setState(() {
+        currentBuild = results;
+      });
+    }
   }
 
-  void refreshSearchScreen() {
-    // TODO: Implement
+  void refreshSearchScreen() async {
+    queryDatabase(_controller.text);
   }
 
   @override
@@ -74,7 +79,6 @@ class _SearchScreenState extends State<SearchScreen> {
           child: TextField(
             controller: _controller,
             onChanged: (String text) {
-              print('triggered');
               queryDatabase(text);
             },
             autofocus: true,
@@ -102,6 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
               suffixIcon: IconButton(
                 onPressed: () {
                   _controller.clear();
+                  refreshSearchScreen();
                 },
                 color: Colors.black45,
                 icon: const Icon(Icons.cancel),
@@ -120,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: ListView(
         children: [
           // whitespace
-          const SizedBox(height: 100),
+          const SizedBox(height: 60),
 
           // The note cards
           for (Note i in currentBuild)
