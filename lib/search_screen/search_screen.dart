@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/general_components/main_database_class.dart';
+import 'visual_components/note_display_template.dart';
 
 class SearchScreen extends StatefulWidget {
   static const screenId = 'search_screen';
@@ -24,10 +25,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // TODO: test your query algorithm with 10,000 notes
   Future<void> queryDatabase(String queryTerm) async {
-    List<Note> results =
-        await widget.mainDatabase.dbQueryNotes(queryTerm);
-    currentBuild = results;
+    List<Note> results = await widget.mainDatabase.dbQueryNotes(queryTerm);
+    setState(() {
+      currentBuild = results;
+    });
     print(results);
+  }
+
+  void refreshSearchScreen() {
+    // TODO: Implement
   }
 
   @override
@@ -110,6 +116,20 @@ class _SearchScreenState extends State<SearchScreen> {
             cursorColor: Colors.green,
           ),
         ),
+      ),
+      body: ListView(
+        children: [
+          // whitespace
+          const SizedBox(height: 100),
+
+          // The note cards
+          for (Note i in currentBuild)
+            SearchScreenNoteCard(
+              note: i,
+              mainDatabase: widget.mainDatabase,
+              refreshSearchScreen: refreshSearchScreen,
+            ),
+        ],
       ),
     );
   }

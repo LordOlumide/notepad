@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/main_database_class.dart';
-import 'package:notepad/home_screen/visual_components/note_template.dart';
+import 'package:notepad/home_screen/visual_components/note_display_template.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:notepad/search_screen/search_screen.dart';
@@ -327,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) {
-                        return NoteCard(
+                        return HomeScreenNoteCard(
                           note: currentNotes[i],
                           refreshHomePage: refreshCurrentNotes,
                           selectionMode: selectionMode,

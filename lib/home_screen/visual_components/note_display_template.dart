@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:notepad/home_screen/homescreen_constants.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:notepad/general_components/constants.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 
-class NoteCard extends StatelessWidget {
+class HomeScreenNoteCard extends StatelessWidget {
   final Note note;
   final Function refreshHomePage;
   bool selectionMode;
@@ -14,7 +13,7 @@ class NoteCard extends StatelessWidget {
   final Function activateSelectionMode;
   final Function toggleNoteState;
 
-  NoteCard({
+  HomeScreenNoteCard({
     Key? key,
     required this.note,
     required this.refreshHomePage,
@@ -27,11 +26,6 @@ class NoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // Prepare the date and time formats with intl
-    DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
-    DateFormat hourDateFormat = DateFormat.jm(); // time
-
-    // Actual time last edited in DateTime format
     DateTime timeLastEditedDateTime =
         DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
 
@@ -96,17 +90,20 @@ class NoteCard extends StatelessWidget {
 
                   // Body
                   note.title != ''
-                      ? Text(
-                          note.body,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: kBodyTextStyle,
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            note.body,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: kBodyTextStyle,
+                          ),
                         )
                       : const SizedBox(),
 
                   // Date Last Edited
                   Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 6),
+                    padding: const EdgeInsets.only(top: 5, bottom: 6),
                     child: Text(
                       '${dayDateFormat.format(timeLastEditedDateTime)} '
                       '${hourDateFormat.format(timeLastEditedDateTime)}',
