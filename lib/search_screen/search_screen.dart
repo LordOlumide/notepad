@@ -23,6 +23,8 @@ class _SearchScreenState extends State<SearchScreen> {
   /// Contains the current list of Notes that fit the query
   List<Note> currentBuild = [];
 
+  bool noSearchResult = false;
+
   // TODO: test your query algorithm with 10,000 notes
   Future<void> queryDatabase(String queryTerm) async {
     if (queryTerm == '') {
@@ -33,6 +35,11 @@ class _SearchScreenState extends State<SearchScreen> {
       List<Note> results = await widget.mainDatabase.dbQueryNotes(queryTerm);
       setState(() {
         currentBuild = results;
+        if (results.isEmpty) {
+          noSearchResult = true;
+        } else {
+          noSearchResult = false;
+        }
       });
     }
   }
@@ -122,20 +129,38 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: ListView(
-        children: [
-          // whitespace
-          const SizedBox(height: 60),
+      body: noSearchResult == false
+          ? ListView(
+              children: [
+                // whitespace
+                const SizedBox(height: 60),
 
-          // The note cards
-          for (Note i in currentBuild)
-            SearchScreenNoteCard(
-              note: i,
-              mainDatabase: widget.mainDatabase,
-              refreshSearchScreen: refreshSearchScreen,
+                // The note cards
+                for (Note i in currentBuild)
+                  SearchScreenNoteCard(
+                    note: i,
+                    mainDatabase: widget.mainDatabase,
+                    refreshSearchScreen: refreshSearchScreen,
+                  ),
+              ],
+            )
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Image.asset(
+                    'images/no_search_results.png',
+                  ),
+                ),
+                const Text(
+                  'No search results',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }
