@@ -6,6 +6,7 @@ import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:notepad/search_screen/search_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:notepad/general_components/miscellaneous_functions.dart';
+import 'package:notepad/general_components/delete_popup.dart';
 
 class HomeScreen extends StatefulWidget {
   static const screenId = 'home_screen';
@@ -347,13 +348,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const SizedBox()
                 : GestureDetector(
                     onTap: () async {
-                      await showDialog(
-                        context: context,
-                        builder: (context) =>
-                            const Dialog(child: Text('Dialog')),
-                      );
                       if (selectedNotes.isNotEmpty) {
-                        deleteSelectedNotesFromDB(selectedNotes);
+                        switch (await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const DeletePopup();
+                          },
+                        )) {
+                          case true:
+                            deleteSelectedNotesFromDB(selectedNotes);
+                            break;
+                          case false:
+                            break;
+                          default:
+                            break;
+                        }
                         deactivateSelectionMode();
                       }
                     },
@@ -387,6 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // FAB for adding new notes
         floatingActionButton: selectionMode == false
             ? SizedBox(
                 width: 50,

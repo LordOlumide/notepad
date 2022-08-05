@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/general_components/constants.dart';
+
 // widgets
 import 'package:notepad/note_editing_screen/widgets/'
     'normal_appbar.dart';
+import 'package:notepad/general_components/delete_popup.dart';
 
 class NoteEditingScreen extends StatefulWidget {
   static const screenId = 'note_editing_screen';
 
   final Note note;
   final NotepadDatabase mainDatabase;
+
   // It appears I have to pass the mainDatabase as an argument instead of just
   // accessing it with Provider because I didn't provide the Provider at the
   // MaterialApp level. Navigator is Linked to the MaterialApp.
@@ -55,96 +58,24 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
 
   void changeMode() {
     if (bodyFocusNode.hasFocus || titleFocusNode.hasFocus) {
-      setState(() {isEditing = true;});
+      setState(() {
+        isEditing = true;
+      });
     } else {
-      setState(() {isEditing = false;});
+      setState(() {
+        isEditing = false;
+      });
     }
   }
 
   void deleteThisNote() async {
-    print('triggered');
-    print(context);
     // return true to delete, false to cancel
-    switch (await showDialog<bool> (context: context, builder: (BuildContext context) {
-      print ('entered');
-      return Container(
-        alignment: Alignment.bottomCenter,
-        margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        child: Material(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // title
-              const Padding(
-                padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                child: Text(
-                  'Delete note',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-
-              // body
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(
-                  'Are you sure you want to delete this note?',
-                  style: TextStyle(
-                    fontSize: 14.5,
-                    color: Colors.grey[700],
-                    fontWeight: FontWeight.w400
-                  ),
-                ),
-              ),
-
-              const Divider(height: 1),
-
-              // actions
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Cancel button
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text(
-                      'CANCEL',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-
-                  // Delete button
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: const Text(
-                      'DELETE',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    })) {
+    switch (await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return const DeletePopup();
+      },
+    )) {
       case true:
         await widget.mainDatabase.dbDeleteNote(widget.note.id);
         if (mounted) {
@@ -275,14 +206,6 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                 maxLines: null,
               ),
             ),
-
-            // TODO: delete this
-            MaterialButton(
-              onPressed: () {
-                deleteThisNote();
-              },
-              child: Text('test'),
-            )
           ],
         ),
       ),
@@ -301,5 +224,4 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     bodyController.dispose();
     super.dispose();
   }
-
 }

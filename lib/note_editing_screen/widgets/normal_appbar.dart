@@ -67,8 +67,10 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
                     height: 30,
                     padding: const EdgeInsets.fromLTRB(15, 0, 100, 0),
                     child: const Text('Delete'),
-                    onTap: () async {
-                      await deleteThisNote(noteEditingContext);
+                    onTap: () {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        deleteThisNote();
+                      });
                     },
                   ),
                 ],
