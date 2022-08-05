@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/note_object.dart';
-import 'package:intl/intl.dart';
-
-// Components
-import 'package:notepad/note_editing_screen/visual_components/'
+import 'package:notepad/general_components/constants.dart';
+// widgets
+import 'package:notepad/note_editing_screen/widgets/'
     'normal_appbar.dart';
 
 class NoteEditingScreen extends StatefulWidget {
@@ -31,10 +30,6 @@ class NoteEditingScreen extends StatefulWidget {
 class _NoteEditingScreenState extends State<NoteEditingScreen> {
   // bool to control the viewing mode
   bool isEditing = false;
-
-  // Prepare the date and time formats with intl
-  DateFormat dayDateFormat = DateFormat.yMMMMd('en_US'); // month date, year
-  DateFormat hourDateFormat = DateFormat.jm(); // time
 
   // FocusNodes to control focus
   late FocusNode titleFocusNode;
@@ -66,6 +61,11 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     }
   }
 
+  void deleteThisNote() async {
+    // TODO: add dialog to confirm
+    await widget.mainDatabase.dbDeleteNote(widget.note.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Actual time last edited in DateTime format
@@ -75,7 +75,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.note.title == '' && widget.note.body == '') {
-          await widget.mainDatabase.dbDeleteNote(widget.note.id);
+          deleteThisNote();
         }
         return true;
       },
@@ -86,6 +86,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
           titleFocusNode: titleFocusNode,
           bodyFocusNode: bodyFocusNode,
           isEditing: isEditing,
+          deleteThisNote: deleteThisNote,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

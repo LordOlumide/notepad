@@ -30,6 +30,7 @@ class SearchScreenNoteCard extends StatelessWidget {
                 note: note, mainDatabase: mainDatabase)))
             .then((_) => {refreshSearchScreen()});
       },
+      onLongPress: () {},
       child: Container(
         margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),

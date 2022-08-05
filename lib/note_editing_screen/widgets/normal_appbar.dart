@@ -4,11 +4,13 @@ class NormalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final FocusNode titleFocusNode;
   final FocusNode bodyFocusNode;
   bool isEditing;
+  final Function deleteThisNote;
 
   NormalAppBar({
     required this.titleFocusNode,
     required this.bodyFocusNode,
     required this.isEditing,
+    required this.deleteThisNote,
   });
 
   @override
@@ -55,14 +57,27 @@ class _NormalAppBarState extends State<NormalAppBar> {
                   widget.titleFocusNode.unfocus();
                 },
               )
-            : IconButton(
+            : PopupMenuButton(
+                padding: const EdgeInsets.all(0),
+                offset: const Offset(0, 45),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 icon: const Icon(
                   Icons.more_vert,
                   color: Colors.green,
                 ),
-                onPressed: () {
-                  // TODO: Implement menu
-                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    height: 30,
+                    padding: const EdgeInsets.fromLTRB(15, 0, 100, 0),
+                    child: const Text('Delete'),
+                    onTap: () {
+                      widget.deleteThisNote();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
       ],
     );
