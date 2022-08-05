@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NormalAppBar extends StatefulWidget implements PreferredSizeWidget {
+class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final FocusNode titleFocusNode;
   final FocusNode bodyFocusNode;
   bool isEditing;
@@ -16,11 +16,6 @@ class NormalAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(50);
 
-  @override
-  State<NormalAppBar> createState() => _NormalAppBarState();
-}
-
-class _NormalAppBarState extends State<NormalAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -46,15 +41,15 @@ class _NormalAppBarState extends State<NormalAppBar> {
         ),
       ),
       actions: [
-        widget.isEditing
+        isEditing
             ? IconButton(
                 icon: const Icon(
                   Icons.check,
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  widget.bodyFocusNode.unfocus();
-                  widget.titleFocusNode.unfocus();
+                  bodyFocusNode.unfocus();
+                  titleFocusNode.unfocus();
                 },
               )
             : PopupMenuButton(
@@ -67,14 +62,13 @@ class _NormalAppBarState extends State<NormalAppBar> {
                   Icons.more_vert,
                   color: Colors.green,
                 ),
-                itemBuilder: (context) => [
+                itemBuilder: (noteEditingContext) => [
                   PopupMenuItem(
                     height: 30,
                     padding: const EdgeInsets.fromLTRB(15, 0, 100, 0),
                     child: const Text('Delete'),
-                    onTap: () {
-                      widget.deleteThisNote();
-                      Navigator.of(context).pop();
+                    onTap: () async {
+                      await deleteThisNote(noteEditingContext);
                     },
                   ),
                 ],

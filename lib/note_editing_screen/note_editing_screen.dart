@@ -62,8 +62,100 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
   }
 
   void deleteThisNote() async {
-    // TODO: add dialog to confirm
-    await widget.mainDatabase.dbDeleteNote(widget.note.id);
+    print('triggered');
+    print(context);
+    // return true to delete, false to cancel
+    switch (await showDialog<bool> (context: context, builder: (BuildContext context) {
+      print ('entered');
+      return Container(
+        alignment: Alignment.bottomCenter,
+        margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        child: Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // title
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                child: Text(
+                  'Delete note',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+
+              // body
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text(
+                  'Are you sure you want to delete this note?',
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w400
+                  ),
+                ),
+              ),
+
+              const Divider(height: 1),
+
+              // actions
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Cancel button
+                  MaterialButton(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+
+                  // Delete button
+                  MaterialButton(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Text(
+                      'DELETE',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    })) {
+      case true:
+        await widget.mainDatabase.dbDeleteNote(widget.note.id);
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+        break;
+      case false:
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -75,7 +167,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.note.title == '' && widget.note.body == '') {
-          deleteThisNote();
+          await widget.mainDatabase.dbDeleteNote(widget.note.id);
         }
         return true;
       },
@@ -183,6 +275,14 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                 maxLines: null,
               ),
             ),
+
+            // TODO: delete this
+            MaterialButton(
+              onPressed: () {
+                deleteThisNote();
+              },
+              child: Text('test'),
+            )
           ],
         ),
       ),
