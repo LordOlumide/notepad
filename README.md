@@ -20,7 +20,12 @@ The challenge is how to do this offline.
 
 ## Screenshots
 
-![Home screen](images/app_screenshots/home_screen.png?raw=true)
-![home screen delete mode](images/app_screenshots/home_deleting.png?raw=true)
-![editing screen](images/app_screenshots/editing_screen.png?raw=true)
-![editing screen delete mode](images/app_screenshots/editing_delete.png?raw=true)
+![Home screen](images/app_screenshots/home_screen.png?raw=true "Home screen")
+
+![home screen delete mode](images/app_screenshots/home_deleting.png?raw=true "Home screen delete mode")
+
+![editing screen](images/app_screenshots/editing_screen.png?raw=true "Editing screen")
+
+![editing screen delete mode](images/app_screenshots/editing_delete.png?raw=true "Editing screen delete mode")
+
+![search screen](images/app_screenshots/search_screen.png?raw=true "Search screen")
