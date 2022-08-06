@@ -28,7 +28,7 @@ void main() {
   // Set the status bar color to transparent
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.white,
   ));
 
   runApp(NotepadApp());

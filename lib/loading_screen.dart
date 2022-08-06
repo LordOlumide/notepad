@@ -23,10 +23,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // Initialize the Database
     await mainDatabase.initializeDatabase();
 
-    // Adding the entries in the dummy db for testing purposes
-    for (int i = 0; i < dummyDatabase.length; i++) {
-      await mainDatabase.dbInsertNote(dummyDatabase[i]);
-    }
+    // // TODO: remove dummyDB addition
+    // // Adding the entries in the dummy db for testing purposes
+    // for (int i = 0; i < dummyDatabase.length; i++) {
+    //   await mainDatabase.dbInsertNote(dummyDatabase[i]);
+    // }
     // Push to home screen
     _pushReplacementToHomeScreen();
   }

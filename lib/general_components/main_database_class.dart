@@ -10,11 +10,11 @@ class NotepadDatabase {
   // creates the "notes" database if it doesn't exist already
   initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-
-    // TODO: The database will have to be stabilized after getting rid of the dummyDB. No more delete-recreate.
-    // delete the previous database
-    deletePreexistingDatabase(
-        join(await getDatabasesPath(), 'notepad_database.db'));
+    //
+    // // TODO: The database will have to be stabilized after getting rid of the dummyDB. No more delete-recreate.
+    // // delete the previous database
+    // deletePreexistingDatabase(
+    //     join(await getDatabasesPath(), 'notepad_database.db'));
 
     // create the database afresh.
     _database = openDatabase(
