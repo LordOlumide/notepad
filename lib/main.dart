@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 // screens
 import 'loading_screen.dart';
 
@@ -14,11 +15,8 @@ import 'loading_screen.dart';
 // one person must edit the same Document.
 // Maybe this shouldn't be a notepad app, but a documents app.
 
-
 // The main Database is initialized in the Loading Screen.
-// The Provider is wrapped around the HomeScreen from the LoadingScreen.
 
-// TODO: Why is Provider not reaching the downstream screens: search screen and noteediting screen?
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -31,13 +29,15 @@ void main() {
     systemNavigationBarColor: Colors.white,
   ));
 
-  runApp(NotepadApp());
+  runApp(const NotepadApp());
 }
 
 class NotepadApp extends StatelessWidget {
+  const NotepadApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return const GetMaterialApp(
       home: LoadingScreen(),
     );
   }

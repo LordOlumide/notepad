@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'visual_components/note_display_template.dart';
@@ -6,18 +7,15 @@ import 'visual_components/note_display_template.dart';
 class SearchScreen extends StatefulWidget {
   static const screenId = 'search_screen';
 
-  final NotepadDatabase mainDatabase;
-
-  const SearchScreen({
-    Key? key,
-    required this.mainDatabase,
-  }) : super(key: key);
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final NotepadDatabaseHelper mainDatabase = Get.find();
+
   late TextEditingController _controller;
 
   /// Contains the current list of Notes that fit the query
@@ -32,7 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
         currentBuild = [];
       });
     } else {
-      List<Note> results = await widget.mainDatabase.dbQueryNotes(queryTerm);
+      List<Note> results = await mainDatabase.dbQueryNotes(queryTerm);
       setState(() {
         currentBuild = results;
         if (results.isEmpty) {
@@ -139,7 +137,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 for (Note i in currentBuild)
                   SearchScreenNoteCard(
                     note: i,
-                    mainDatabase: widget.mainDatabase,
                     refreshSearchScreen: refreshSearchScreen,
                   ),
               ],

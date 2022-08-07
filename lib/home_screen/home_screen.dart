@@ -4,7 +4,7 @@ import 'package:notepad/home_screen/widgets/note_display_template.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 import 'package:notepad/search_screen/search_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:notepad/general_components/miscellaneous_functions.dart';
 import 'package:notepad/general_components/delete_popup.dart';
 
@@ -18,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  NotepadDatabaseHelper mainDatabase = Get.find();
+
   /// This List is for display purposes only.
   /// Does not affect the actual Database.
   List<Note> currentNotes = [];
@@ -37,8 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Refreshes the currentNotes and currentStates lists.
   Future<void> refreshCurrentNotes() async {
     // TODO: use notifyListeners to update the currentNotes from the mainDB object??
-    List<Note> tempCurrentNotes =
-        await Provider.of<NotepadDatabase>(context, listen: false).dbGetNotes();
+    List<Note> tempCurrentNotes = await mainDatabase.dbGetNotes();
     // Sort tempNotes
     tempCurrentNotes
         .sort((a, b) => b.timeLastEdited.compareTo(a.timeLastEdited));
@@ -147,8 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (Note note in tempNotesToDelete) {
       selectedNotes.remove(note);
       if (mounted) {
-        await Provider.of<NotepadDatabase>(context, listen: false)
-            .dbDeleteNote(note.id);
+        await mainDatabase.dbDeleteNote(note.id);
       }
     }
     refreshCurrentNotes();
@@ -174,23 +174,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Future<void> pushToEditingScreen(Note newNote) {
-      final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
       return Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => NoteEditingScreen(
-                note: newNote,
-                mainDatabase: mainDatabase,
-              )));
+          builder: (context) => NoteEditingScreen(note: newNote)));
     }
 
-    Future<void> pushToSearchScreen(){
-      final mainDatabase = Provider.of<NotepadDatabase>(context, listen: false);
+    Future<void> pushToSearchScreen() {
       return Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => SearchScreen(
-              mainDatabase: mainDatabase,
-            )),
+        MaterialPageRoute(builder: (context) => const SearchScreen()),
       );
     }
 
@@ -285,7 +276,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     elevation: 0,
                     title: GestureDetector(
                       onTap: () {
-                        pushToSearchScreen();
+                        pushToSearchScreen()
+                            .then((value) => refreshCurrentNotes());
                       }, // Push to search screen
                       child: Container(
                         height: 40,
@@ -412,8 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         bgColor: getRandomColor().value,
                       );
                       // adds the newNote to the Database
-                      await Provider.of<NotepadDatabase>(context, listen: false)
-                          .dbInsertNote(newNote);
+                      await mainDatabase.dbInsertNote(newNote);
                       // pushes to noteEditing screen
                       await pushToEditingScreen(newNote);
                       // refresh the HomeScreen

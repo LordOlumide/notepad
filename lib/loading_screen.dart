@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/home_screen/home_screen.dart';
 import 'package:notepad/general_components/main_database_class.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:notepad/dummy_db.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
 
   // Open the main Database
-  final mainDatabase = NotepadDatabase();
+  final NotepadDatabaseHelper mainDatabase = Get.put(NotepadDatabaseHelper());
 
   // TODO: Remove the dummy DB
   _initializeDBAndPushReplacementToHomeScreen() async {
@@ -36,10 +36,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => Provider(
-          create: (context) => mainDatabase,
-          child: HomeScreen(),
-        ),
+        builder: (context) => HomeScreen(),
       ),
     );
   }

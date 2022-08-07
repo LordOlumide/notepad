@@ -10,6 +10,7 @@ What's left:
 
 This project is a personal one made to learn how to:
 - use SQLite in practice,                             ✅
+- use GetX properly                                   ✅
 - write tests for flutter widgets,                    --
 - light and dark themes based on system settings,     --
 - output desktop app,                                 --

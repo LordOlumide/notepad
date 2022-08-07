@@ -3,18 +3,18 @@ import 'package:notepad/general_components/note_object.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class NotepadDatabase {
+class NotepadDatabaseHelper {
   // It is private so it can only be accessed by the defined CRUD functions
   late final Future<Database> _database;
 
   // creates the "notes" database if it doesn't exist already
   initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    //
-    // // TODO: The database will have to be stabilized after getting rid of the dummyDB. No more delete-recreate.
-    // // delete the previous database
-    // deletePreexistingDatabase(
-    //     join(await getDatabasesPath(), 'notepad_database.db'));
+
+    // TODO: The database will have to be stabilized after getting rid of the dummyDB. No more delete-recreate.
+    // delete the previous database for testing purposes
+    deletePreexistingDatabase(
+        join(await getDatabasesPath(), 'notepad_database.db'));
 
     // create the database afresh.
     _database = openDatabase(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/general_components/constants.dart';
@@ -12,25 +13,16 @@ class NoteEditingScreen extends StatefulWidget {
   static const screenId = 'note_editing_screen';
 
   final Note note;
-  final NotepadDatabase mainDatabase;
 
-  // It appears I have to pass the mainDatabase as an argument instead of just
-  // accessing it with Provider because I didn't provide the Provider at the
-  // MaterialApp level. Navigator is Linked to the MaterialApp.
-  // Meanwhile, I can't provide at the material app level because I must
-  // initialize the Database before providing.
-  // There should be a way to fix it by removing the loadingScreen and
-  // working it out in main.dart.
-
-  const NoteEditingScreen(
-      {Key? key, required this.note, required this.mainDatabase})
-      : super(key: key);
+  const NoteEditingScreen({Key? key, required this.note}) : super(key: key);
 
   @override
   State<NoteEditingScreen> createState() => _NoteEditingScreenState();
 }
 
 class _NoteEditingScreenState extends State<NoteEditingScreen> {
+  final NotepadDatabaseHelper mainDatabase = Get.find();
+
   // bool to control the viewing mode
   bool isEditing = false;
 
@@ -77,7 +69,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
       },
     )) {
       case true:
-        await widget.mainDatabase.dbDeleteNote(widget.note.id);
+        await mainDatabase.dbDeleteNote(widget.note.id);
         if (mounted) {
           Navigator.of(context).pop();
         }
@@ -98,7 +90,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.note.title == '' && widget.note.body == '') {
-          await widget.mainDatabase.dbDeleteNote(widget.note.id);
+          await mainDatabase.dbDeleteNote(widget.note.id);
         }
         return true;
       },
@@ -137,7 +129,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                     newTitle: newValue,
                   );
                   // Update the database with the updated note object
-                  await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
+                  await mainDatabase.dbUpdateNote(noteTempForUpdate);
                 }
               },
               focusNode: titleFocusNode,
@@ -178,7 +170,7 @@ class _NoteEditingScreenState extends State<NoteEditingScreen> {
                       newBody: newValue,
                     );
                     // Update the database with the updated note object
-                    await widget.mainDatabase.dbUpdateNote(noteTempForUpdate);
+                    await mainDatabase.dbUpdateNote(noteTempForUpdate);
                   }
                 },
                 focusNode: bodyFocusNode,

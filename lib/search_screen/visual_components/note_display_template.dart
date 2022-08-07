@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/general_components/main_database_class.dart';
 import 'package:notepad/general_components/constants.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
 
 class SearchScreenNoteCard extends StatelessWidget {
   final Note note;
   final Function refreshSearchScreen;
-  final NotepadDatabase mainDatabase;
 
   const SearchScreenNoteCard({
     Key? key,
     required this.note,
-    required this.mainDatabase,
     required this.refreshSearchScreen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
+
     DateTime timeLastEditedDateTime =
         DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
 
@@ -26,8 +23,7 @@ class SearchScreenNoteCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context)
             .push(MaterialPageRoute(
-            builder: (context) => NoteEditingScreen(
-                note: note, mainDatabase: mainDatabase)))
+                builder: (context) => NoteEditingScreen(note: note)))
             .then((_) => {refreshSearchScreen()});
       },
       onLongPress: () {},
@@ -45,9 +41,7 @@ class SearchScreenNoteCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Text(
-                note.title != ''
-                    ? note.title
-                    : note.body,
+                note.title != '' ? note.title : note.body,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: kTitleTextStyle,
@@ -57,14 +51,14 @@ class SearchScreenNoteCard extends StatelessWidget {
             // Body
             note.title != ''
                 ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                note.body,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: kBodyTextStyle,
-              ),
-            )
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      note.body,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: kBodyTextStyle,
+                    ),
+                  )
                 : const SizedBox(),
 
             // Date Last Edited
@@ -72,7 +66,7 @@ class SearchScreenNoteCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 5, bottom: 6),
               child: Text(
                 '${dayDateFormat.format(timeLastEditedDateTime)} '
-                    '${hourDateFormat.format(timeLastEditedDateTime)}',
+                '${hourDateFormat.format(timeLastEditedDateTime)}',
                 style: kDateTimeTextStyle,
               ),
             )

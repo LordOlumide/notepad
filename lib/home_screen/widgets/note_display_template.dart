@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/general_components/note_object.dart';
 import 'package:notepad/note_editing_screen/note_editing_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:notepad/general_components/constants.dart';
-import 'package:notepad/general_components/main_database_class.dart';
 
 class HomeScreenNoteCard extends StatelessWidget {
   final Note note;
@@ -30,14 +28,9 @@ class HomeScreenNoteCard extends StatelessWidget {
         DateTime.fromMillisecondsSinceEpoch(note.timeLastEdited);
 
     void onNormalModeTap() {
-      // Get the mainDatabase and push to NoteEditing screen with it.
-      // An error prevented me from using Provider to get the DB in NoteEditingScreen.
-      NotepadDatabase mainDatabase =
-      Provider.of<NotepadDatabase>(context, listen: false);
       Navigator.of(context)
           .push(MaterialPageRoute(
-          builder: (context) => NoteEditingScreen(
-              note: note, mainDatabase: mainDatabase)))
+              builder: (context) => NoteEditingScreen(note: note)))
           .then((_) => {refreshHomePage()});
     }
 
@@ -79,9 +72,7 @@ class HomeScreenNoteCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
                     child: Text(
-                      note.title != ''
-                          ? note.title
-                          : note.body,
+                      note.title != '' ? note.title : note.body,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: kTitleTextStyle,
