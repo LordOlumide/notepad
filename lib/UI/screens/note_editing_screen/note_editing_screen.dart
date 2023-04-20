@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notepad/general_components/main_database_class.dart';
-import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/general_components/constants.dart';
+import 'package:notepad/UI/general_components/main_database_class.dart';
+import 'package:notepad/UI/general_components/note_object.dart';
+import 'package:notepad/UI/general_components/constants.dart';
 
 // widgets
-import 'package:notepad/note_editing_screen/widgets/'
+import 'package:notepad/UI/screens/note_editing_screen/widgets/'
     'normal_appbar.dart';
-import 'package:notepad/general_components/delete_popup.dart';
+import 'package:notepad/UI/general_components/delete_popup.dart';
 
 class NoteEditingScreen extends StatefulWidget {
   static const screenId = 'note_editing_screen';

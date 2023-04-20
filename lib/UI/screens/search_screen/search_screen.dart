@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/general_components/main_database_class.dart';
+import 'package:notepad/UI/general_components/note_object.dart';
+import 'package:notepad/UI/general_components/main_database_class.dart';
 import 'visual_components/note_display_template.dart';
 
 class SearchScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/home_screen/home_screen.dart';
-import 'package:notepad/general_components/main_database_class.dart';
+import 'package:notepad/UI/screens/home_screen/home_screen.dart';
+import 'package:notepad/UI/general_components/main_database_class.dart';
 import 'package:get/get.dart';
 import 'package:notepad/dummy_db.dart';
 

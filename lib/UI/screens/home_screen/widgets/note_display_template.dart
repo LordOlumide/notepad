@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/note_editing_screen/note_editing_screen.dart';
-import 'package:notepad/general_components/constants.dart';
+import 'package:notepad/UI/general_components/note_object.dart';
+import 'package:notepad/UI/screens/note_editing_screen/note_editing_screen.dart';
+import 'package:notepad/UI/general_components/constants.dart';
 
 class HomeScreenNoteCard extends StatelessWidget {
   final Note note;

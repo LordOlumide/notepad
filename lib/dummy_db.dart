@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/general_components/note_object.dart';
+import 'package:notepad/UI/general_components/note_object.dart';
 
 List<Note> dummyDatabase = [
   Note(

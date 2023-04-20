@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/general_components/main_database_class.dart';
-import 'package:notepad/home_screen/widgets/note_display_template.dart';
-import 'package:notepad/general_components/note_object.dart';
-import 'package:notepad/note_editing_screen/note_editing_screen.dart';
-import 'package:notepad/search_screen/search_screen.dart';
+import 'package:notepad/UI/general_components/main_database_class.dart';
+import 'package:notepad/UI/screens/home_screen/widgets/note_display_template.dart';
+import 'package:notepad/UI/general_components/note_object.dart';
+import 'package:notepad/UI/screens/note_editing_screen/note_editing_screen.dart';
+import 'package:notepad/UI/screens/search_screen/search_screen.dart';
 import 'package:get/get.dart';
-import 'package:notepad/general_components/miscellaneous_functions.dart';
-import 'package:notepad/general_components/delete_popup.dart';
+import 'package:notepad/UI/general_components/miscellaneous_functions.dart';
+import 'package:notepad/UI/general_components/delete_popup.dart';
 
 class HomeScreen extends StatefulWidget {
   static const screenId = 'home_screen';

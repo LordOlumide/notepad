@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:notepad/UI/screens/jotter_screen/test_screen.dart';
+import 'package:notepad/UI/screens/jotter_screen/jotter_screen.dart';
 // screens
 import 'loading_screen.dart';
 
@@ -38,7 +40,8 @@ class NotepadApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GetMaterialApp(
-      home: LoadingScreen(),
+      // home: LoadingScreen(),
+      home: JotterScreen(),
     );
   }
 }
